@@ -598,6 +598,20 @@ table.w-tbl{width:100%;border-collapse:collapse;min-width:1040px;font-variant-nu
   .w-news .w-wrap{gap:12px}.w-news button:not(.more){display:none}.w-news button:not(.more):first-of-type{display:block;flex:1;max-width:none}
   .w-crumb{flex-wrap:wrap}
 }
+/* 汇率计算器：失败状态、0 手续费提示；服务页常用汇率 */
+.w-calc .zf{margin-top:10px;font-size:13px;color:#17845A;font-weight:600}
+.w-calc-err .err{background:#FFF6F6;border:1px solid #F5C6C9;border-radius:14px;padding:18px;margin:14px 0;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.w-calc-err .err p{margin:0;color:var(--w-ink2);font-size:14px}
+.w-rlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:20px}
+.w-rlist div{background:var(--w-tint);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;gap:8px;font-size:14px}
+.w-rlist span{color:var(--w-ink3)}
+/* 下载：电脑端扫码，手机端只给按钮 */
+.m-only{display:none}
+.w-dlhelp{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3);text-align:center}
+.w-alert{margin-top:24px;border-radius:12px;padding:12px 16px;font-size:14px}
+.w-alert.warn{background:#FFF8E6;border:1px solid #F5D58A;color:#7A5300}
+.w-alert.err{background:#FFF2F2;border:1px solid #F5C6C9;color:#B42318}
+@media (max-width:640px){.pc-only{display:none!important}.m-only{display:inline}.w-rlist{grid-template-columns:1fr}}
 .rte-bar{display:flex;gap:4px;flex-wrap:wrap;align-items:center;padding:6px;border:1px solid var(--line);border-bottom:0;border-radius:8px 8px 0 0;background:#FAFBFD}
 .tb{height:28px;min-width:30px;padding:0 8px;border:1px solid transparent;border-radius:6px;background:none;cursor:pointer;font-size:12.5px;color:var(--ink);display:inline-flex;align-items:center;justify-content:center}
 .tb:hover{background:#fff;border-color:var(--line)}
@@ -704,7 +718,7 @@ const ST={draft:'草稿',scheduled:'定时发布',published:'已发布',offline:
 const PERM={edit:'编辑',publish:'发布',biz:'合作处理',admin:'系统管理'};
 
 /* ---------- 数据 ---------- */
-const S={me:'u5',members:[],cats:{},contents:[],slots:[],apps:[],notify:{tg:{on:true,target:'易换商务合作群'},mail:{on:false,to:'bd@yihuan.example'}},seq:{TU:10,FQ:5,RK:7,NW:5,HZ:13}};
+const S={me:'u5',members:[],cats:{},contents:[],slots:[],apps:[],notify:{tg:{on:true,target:'易换商务合作群'},mail:{on:false,to:'bd@yihuan.example'}},seq:{TU:11,FQ:5,RK:7,NW:5,HZ:13}};
 
 function seed(){
   S.members=[
@@ -801,7 +815,10 @@ function seed(){
     h2('操作步骤')+ol(['首页点「充值」，选择币种和充值方式。','输入金额，生成订单。','按订单页显示的收款信息和金额付款，付款时填写订单号。','付款完成后点「我已付款」，上传付款截图。'])+pic(sDep)+
     warn('请按订单显示的金额付款，多付或少付都会导致到账变慢。订单超时后不要再付款。')+
     h2('多久到账')+p('到账时间以订单页显示为准，可以在「订单」里随时查看。'),
-    'How to deposit','','');
+    'How to deposit','Choose a method, pay the exact order amount, and track it on the order page.',
+    h2('Steps')+ol(['Tap “Deposit” on the home screen and choose a currency and method.','Enter the amount to create an order.','Pay the exact amount to the account shown on the order page, with the order number as the reference.','Tap “I have paid” and upload your payment screenshot.'])+pic(sDep)+
+    warn('Pay exactly the order amount. Paying more or less slows things down. Do not pay after the order has expired.')+
+    h2('How long it takes')+p('The arrival time shown on the order page is the one that counts. You can check it under “Orders” anytime.'));
 
   const T6=B('如何提现','选好收款账户，输入金额和交易密码即可提交，进度在订单页查看。',
     h2('操作步骤')+ol(['首页点「提现」，选择币种。','选择已保存的收款账户，或新增一个。','输入金额，确认手续费和到账金额。','输入交易密码提交。'])+pic(sWd)+
@@ -843,7 +860,8 @@ function seed(){
 
   const F3=B('换汇汇率以哪个时间为准？','以你在 App 里确认下单那一刻显示的汇率为准。',
     tip('<b>先看结论</b><br>以你确认下单那一刻页面显示的汇率为准，下单后不会再变。')+h2('为什么页面汇率会变')+p('汇率实时更新，停留在页面上时数字会跟着变动。'),
-    '','','');
+    'Which time is the exchange rate based on?','The rate shown when you confirm the order in the app.',
+    tip('<b>Quick answer</b><br>The rate shown at the moment you confirm the order. It does not change after that.')+h2('Why the rate on screen changes')+p('Rates update live, so the number moves while you stay on the page.'));
 
   const R1=B('不要把验证码发给任何人','验证码就是账户钥匙，易换工作人员不会以任何理由索要。',
     warn('<b>一句话警示</b><br>验证码 = 你的账户钥匙。易换任何工作人员都<b>不会</b>向你索要验证码。')+
@@ -1008,12 +1026,13 @@ function seed(){
     mk({id:'TU20261002',type:'tutorial',cat:'c2',status:'published',views:5130,created:d(2026,10,3),updated:d(2026,10,5,11),publishedAt:d(2026,10,5,11),data:cvr(T2,cv2),related:['RK20261001']}),
     mk({id:'TU20261003',type:'tutorial',cat:'c2',status:'published',views:3204,created:d(2026,10,4),updated:d(2026,10,27,17,40),publishedAt:d(2026,10,6,10),data:cvr(T3,cv3)}),
     mk({id:'TU20261004',type:'tutorial',cat:'c3',status:'published',views:2675,created:d(2026,10,7),updated:d(2026,10,8),publishedAt:d(2026,10,8),data:cvr(T4,cv4)}),
-    mk({id:'TU20261005',type:'tutorial',cat:'c4',status:'draft',created:d(2026,10,26),updated:d(2026,10,27,10,5),data:cvr(T5,cv5)}),
-    mk({id:'TU20261006',type:'tutorial',cat:'c4',status:'draft',created:d(2026,10,27,15),updated:d(2026,10,28,9,20),data:cvr(T6,cv6)}),
-    mk({id:'TU20261007',type:'tutorial',cat:'c4',status:'draft',created:d(2026,10,25),updated:d(2026,10,27,16),data:cvr(T7,cv7)}),
+    mk({id:'TU20261005',type:'tutorial',cat:'c4',status:'published',views:640,created:d(2026,10,26),updated:d(2026,10,29,9),publishedAt:d(2026,10,29,9),data:cvr(T5,cv5)}),
+    mk({id:'TU20261006',type:'tutorial',cat:'c4',status:'published',views:512,created:d(2026,10,27,15),updated:d(2026,10,29,9,10),publishedAt:d(2026,10,29,9,10),data:cvr(T6,cv6)}),
+    mk({id:'TU20261007',type:'tutorial',cat:'c4',status:'published',views:733,created:d(2026,10,25),updated:d(2026,10,29,9,20),publishedAt:d(2026,10,29,9,20),data:cvr(T7,cv7)}),
     mk({id:'FQ20261001',type:'faq',cat:'c5',status:'published',views:6210,created:d(2026,10,2),updated:d(2026,10,14),publishedAt:d(2026,10,14),data:cvr(F1,cv8),related:['TU20261005']}),
     mk({id:'FQ20261002',type:'faq',cat:'c6',status:'published',views:2988,created:d(2026,10,9),updated:d(2026,10,10),publishedAt:d(2026,10,10),data:cvr(F2,cv6),related:['TU20261003']}),
-    mk({id:'FQ20261003',type:'faq',cat:'c7',status:'draft',created:d(2026,10,28,8,30),updated:d(2026,10,28,8,30),data:F3}),
+    mk({id:'FQ20261003',type:'faq',cat:'c7',status:'published',views:420,created:d(2026,10,28,8,30),updated:d(2026,10,29,9,30),publishedAt:d(2026,10,29,9,30),data:cvr(F3,cv7)}),
+    mk({id:'TU20261011',type:'tutorial',cat:'c4',status:'draft',created:d(2026,10,29,14),updated:d(2026,10,29,15),data:B('现金配送怎么下单','选好城市和收款人，下单后骑手送现上门。',h2('操作步骤')+ol(['首页点「现金配送」，选择城市。','填写收款人姓名、电话和地址。']),'','','')}),
     mk({id:'RK20261001',type:'risk',cat:'c12',status:'published',views:9310,created:d(2026,10,1),updated:d(2026,10,14),publishedAt:d(2026,10,14),data:cvr(R1,cv9),related:['TU20261002','RK20261002']}),
     mk({id:'RK20261002',type:'risk',cat:'c10',status:'published',views:4102,created:d(2026,10,3),updated:d(2026,10,4),publishedAt:d(2026,10,4),data:cvr(R2,cv10),related:['TU20261001']}),
     mk({id:'RK20261003',type:'risk',cat:'c12',status:'offline',views:1877,created:d(2026,9,12),updated:d(2026,10,18),publishedAt:d(2026,9,13),data:cvr(R3,cv9)}),
@@ -1041,22 +1060,22 @@ function seed(){
     {id:'s2',name:'新手学院 · 主推教程',types:['tutorial'],cap:1,items:['TU20261001']},
     {id:'s3',name:'新手学院 · 上手教程',types:['tutorial'],cap:3,items:['TU20261002','TU20261003','TU20261004']},
     {id:'s4',name:'新手学院 · 合作方教程',types:['tutorial'],cap:3,items:['TU20261004']},
-    {id:'s5',name:'新手学院 · 基础功能',types:['tutorial'],cap:3,items:['TU20261005']},
+    {id:'s5',name:'新手学院 · 基础功能',types:['tutorial'],cap:3,items:['TU20261007','TU20261005','TU20261006']},
     {id:'s6',name:'新手学院 · 防骗防盗号',types:['risk'],cap:6,items:['RK20261001','RK20261002','RK20261003']},
-    {id:'s7',name:'新手学院 · 常见问题',types:['faq'],cap:3,items:['FQ20261001','FQ20261002']},
+    {id:'s7',name:'新手学院 · 常见问题',types:['faq'],cap:3,items:['FQ20261003','FQ20261001','FQ20261002']},
     {id:'s8',name:'新手学院 · 行业热点',types:['news'],cap:3,items:['NW20261001','NW20261002','NW20261004']}
   ];
 
   const lic=cert('营业执照'),lic2=cert('支付业务许可');
   const A=(id,name,person,method,handle,country,biz,vol,desc,files,at,owner,status,notes)=>({id,name,person,method,handle,country,biz,vol,desc,files,at,owner,status,notes});
   S.apps=[
-    A('HZ20261028002','Manila QuickPay','Carlos Reyes','Telegram','@carlos_qp','菲律宾','支付通道','≥ 500 万 PHP','本地电子钱包聚合，希望接入 PHP 入金通道。',[lic],d(2026,10,28,9,42),'','pending',[]),
+    A('HZ20261028002','Manila QuickPay','Carlos Reyes','Telegram','@carlos_qp','菲律宾','支付通道','≥ 500 万 USD','本地电子钱包聚合，希望接入 PHP 入金通道。',[lic],d(2026,10,28,9,42),'','pending',[]),
     A('HZ20261028001','金边恒通汇兑','林志豪','手机','+855 12 345 678','柬埔寨','线下兑换门店','100–500 万 USD','金边 3 家门店，想合作美金现钞兑换。',[lic,lic2],d(2026,10,28,8,15),'','pending',[]),
-    A('HZ20261027003','Saigon Trade Co.','Nguyen Van An','邮箱','an.nguyen@saigontrade.example','越南','跨境贸易','≥ 500 万 VND','进出口贸易结算需求，月结。',[],d(2026,10,27,21,3),'','pending',[]),
-    A('HZ20261027002','曼谷速汇','陈雅','Telegram','@bkk_fastfx','泰国','汇款服务','100–500 万 THB','泰铢转人民币汇款，日均 200 笔。',[lic],d(2026,10,27,16,20),'u4','reviewing',[{at:d(2026,10,27,16,40),who:'陈商务',text:'开始审核',sys:1},{at:d(2026,10,27,17),who:'陈商务',text:'已电话沟通，对方需要我们的费率表，明天发送。'}]),
-    A('HZ20261026001','Dubai Gold Exchange','Omar Haddad','邮箱','omar@dge.example','阿联酋','黄金交易','≥ 500 万 AED','希望结合黄金交付做大额换汇。',[lic,lic2],d(2026,10,26,11,8),'u4','reviewing',[{at:d(2026,10,26,14,30),who:'陈商务',text:'开始审核',sys:1},{at:d(2026,10,26,15),who:'陈商务',text:'首轮视频会议完成，等待对方补充资质。'},{at:d(2026,10,27,10),who:'赵主管',text:'资质已收到，转风控审核。'}]),
-    A('HZ20261024002','新加坡联汇','黄凯','Telegram','@sg_unionfx','新加坡','汇款服务','100–500 万 SGD','新币通道合作。',[lic],d(2026,10,24,14),'u4','signed',[{at:d(2026,10,24,15),who:'陈商务',text:'开始审核',sys:1},{at:d(2026,10,24,16),who:'陈商务',text:'沟通完成，对方接受费率方案。'},{at:d(2026,10,25,10),who:'陈商务',text:'已签框架协议，下周对接技术。'},{at:d(2026,10,25,11),who:'陈商务',text:'签约',sys:1}]),
-    A('HZ20261023001','台北好换','吴建宏','手机','+886 912 345 678','台湾','线下兑换门店','≤ 100 万 TWD','个人工作室。',[],d(2026,10,23,10),'u4','rejected',[{at:d(2026,10,23,14),who:'陈商务',text:'开始审核',sys:1},{at:d(2026,10,23,14,40),who:'陈商务',text:'核实营业执照，对方为个人工作室。'},{at:d(2026,10,23,15),who:'陈商务',text:'拒绝：无相关经营资质，规模不满足合作要求。',sys:1}])
+    A('HZ20261027003','Saigon Trade Co.','Nguyen Van An','邮箱','an.nguyen@saigontrade.example','越南','跨境贸易','≥ 500 万 USD','进出口贸易结算需求，月结。',[],d(2026,10,27,21,3),'','pending',[]),
+    A('HZ20261027002','曼谷速汇','陈雅','Telegram','@bkk_fastfx','泰国','汇款服务','100–500 万 USD','泰铢转人民币汇款，日均 200 笔。',[lic],d(2026,10,27,16,20),'u4','reviewing',[{at:d(2026,10,27,16,40),who:'陈商务',text:'开始审核',sys:1},{at:d(2026,10,27,17),who:'陈商务',text:'已电话沟通，对方需要我们的费率表，明天发送。'}]),
+    A('HZ20261026001','Dubai Gold Exchange','Omar Haddad','邮箱','omar@dge.example','阿联酋','黄金交易','≥ 500 万 USD','希望结合黄金交付做大额换汇。',[lic,lic2],d(2026,10,26,11,8),'u4','reviewing',[{at:d(2026,10,26,14,30),who:'陈商务',text:'开始审核',sys:1},{at:d(2026,10,26,15),who:'陈商务',text:'首轮视频会议完成，等待对方补充资质。'},{at:d(2026,10,27,10),who:'赵主管',text:'资质已收到，转风控审核。'}]),
+    A('HZ20261024002','新加坡联汇','黄凯','Telegram','@sg_unionfx','新加坡','汇款服务','100–500 万 USD','新币通道合作。',[lic],d(2026,10,24,14),'u4','signed',[{at:d(2026,10,24,15),who:'陈商务',text:'开始审核',sys:1},{at:d(2026,10,24,16),who:'陈商务',text:'沟通完成，对方接受费率方案。'},{at:d(2026,10,25,10),who:'陈商务',text:'已签框架协议，下周对接技术。'},{at:d(2026,10,25,11),who:'陈商务',text:'签约',sys:1}]),
+    A('HZ20261023001','台北好换','吴建宏','手机','+886 912 345 678','台湾','线下兑换门店','≤ 100 万 USD','个人工作室。',[],d(2026,10,23,10),'u4','rejected',[{at:d(2026,10,23,14),who:'陈商务',text:'开始审核',sys:1},{at:d(2026,10,23,14,40),who:'陈商务',text:'核实营业执照，对方为个人工作室。'},{at:d(2026,10,23,15),who:'陈商务',text:'拒绝：无相关经营资质，规模不满足合作要求。',sys:1}])
   ];
 }
 
@@ -1551,7 +1570,7 @@ function wCard(c){return `<button class="w-card" data-w-go="detail/${c.id}">${c.
 function wRisk(c){const hi=catRed(c.type,c.cat);return `<button class="w-scard ${hi?'r':''}" data-w-go="detail/${c.id}"><span class="w-tag ${hi?'r':''}">${esc(catL(c.type,c.cat))}</span><b>${esc(tx(c,'title'))}</b><small>${esc(tx(c,'lead'))}</small></button>`}
 function wFaq(c){return `<button data-w-go="detail/${c.id}"><span class="w-tag">${esc(catL(c.type,c.cat))}</span><b>${esc(tx(c,'title'))}</b><small class="mono">${fmtD(c.updated)}</small><i>${tr('查看处理步骤','View steps')} ›</i></button>`}
 function wNewsRow(c){return `<button class="w-newsrow" data-w-go="detail/${c.id}">${c.data.cover?`<img src="${c.data.cover.src}" alt="">`:'<span></span>'}<span><span class="w-tag">${esc(catL(c.type,c.cat))}</span><b style="margin-top:8px">${esc(tx(c,'title'))}</b><p>${esc(tx(c,'lead'))}</p><span class="mt"><span>${fmtD(c.publishedAt)}</span><span>${tr('阅读','Views')} ${c.views.toLocaleString()}</span></span></span></button>`}
-function wQR(){return `<div class="w-qr"><img src="${qrImg()}" alt="${tr('下载二维码','Download QR code')}"><button class="w-btn blue sm" data-w-dl>${tr('扫码下载','Scan to download')}</button></div>`}
+function wQR(){return `<div class="w-qr"><img class="pc-only" src="${qrImg()}" alt="${tr('下载二维码','Download QR code')}"><button class="w-btn blue sm" data-w-dl><span class="pc-only">${tr('扫码下载','Scan to download')}</span><span class="m-only">${tr('下载 App','Get the app')}</span></button></div>`}
 function wWallet(bg){return `<div class="w-wallet" aria-hidden="true" ${bg?`style="background:${bg}"`:''}><div class="cd" style="background:#1F3A8A;left:12%;top:40px;transform:rotate(-8deg)"><small>${tr('菲律宾披索','Philippine peso')}</small><b>₱ 12,480</b><span>PHP</span></div><div class="cd" style="background:#2F9E7A;left:40%;top:70px;transform:rotate(5deg)"><small>${tr('USDT 钱包','USDT wallet')}</small><b>₮ 860.25</b><span>USDT</span></div><div class="cd" style="background:#2F55E0;left:26%;top:120px"><small>${tr('越南盾','Vietnamese dong')}</small><b>₫ 3,200,000</b><span>VND</span></div></div>`}
 const REG=[['越南','Vietnam'],['缅甸','Myanmar'],['柬埔寨','Cambodia'],['菲律宾','Philippines'],['马来西亚','Malaysia'],['新加坡','Singapore'],['香港','Hong Kong'],['日本','Japan']];
 function wManage(title,sub,tint){return `<section class="w-sec ${tint?'tint':''}"><div class="w-wrap w-split">${wWallet(tint?'#fff':'')}<div><h2 class="w-h2">${title}</h2><p class="w-sub" style="font-size:16px">${sub}</p>${wQR()}</div></div></section>`}
@@ -1574,7 +1593,7 @@ function wFooter(){
   <div><h4>${tr('帮助与企业信息','Help & company')}</h4>${L('关于我们','About us','about')}${L('联系我们','Contact us','about','data-w-to="w-contact"')}${L('新手学院','Academy','academy')}${L('商家合作','Partner with us','apply')}${L('提交投诉','Complaints')}${L('使用条款','Terms of use','page/terms')}${L('隐私政策','Privacy policy','page/privacy')}${L('常见问题','FAQ','list/faq')}</div></div>
   <p class="about">${tr('平台提供多地区在线换汇、实时汇率查询与国际汇款服务，支持多币种兑换与汇率计算工具，帮助用户在常见出境场景下快速完成换汇与资金流转。','Online exchange, live rates and international transfers across regions, with multi-currency exchange and rate tools for everyday travel and business.')}</p>
   <div class="ch"><button data-w-proto>${tr('中文官方频道','Chinese channel')}</button><button data-w-proto>${tr('越南官方频道','Vietnamese channel')}</button><button data-w-proto>${tr('中文直播频道','Chinese live channel')}</button></div>
-  <div class="cp"><span>© 2026 ${tr('易换 版权所有','Yihuan. All rights reserved.')}</span><span>ICP —</span></div></div></footer>`;
+  <div class="cp"><span>© 2026 ${tr('易换 版权所有','Yihuan. All rights reserved.')}</span><span>${tr('运营主体','Operated by')}：[${tr('公司全称','Company name')}] · [${tr('注册地','Registered in')}]</span><span>[${tr('ICP 备案号（如适用）','ICP number, if applicable')}]</span></div></div></footer>`;
 }
 
 /* ---------- 首页 ---------- */
@@ -1587,26 +1606,33 @@ function wHome(){
     <div class="w-stats"><div><b>${tr('10 万+','100K+')}</b><span>${tr('用户','Users')}</span></div><div><b>8</b><span>${tr('个国家和地区','Countries & regions')}</span></div><div><b>40+</b><span>${tr('种货币','Currencies')}</span></div></div></div>
     <div class="w-phones" aria-hidden="true"><div class="w-phone p1"><div class="bar">${tr('搜索币种','Search')}</div><div class="ttl">${tr('行情','Markets')}</div><div class="chart"></div><div class="chart" style="height:60px"></div></div>
     <div class="w-phone p2"><div class="bar">${tr('搜索易夺宝、话费充值','Search')}</div><div class="ttl">${tr('创新金融产品','Yihuan')}</div><div class="grd">${[['扫一扫','Scan'],['收款','Receive'],['换汇','Exchange'],['提现','Withdraw'],['充值','Top up'],['转账','Transfer'],['生活缴费','Bills'],['更多','More']].map(([z,e])=>`<span><i></i>${tr(z,e)}</span>`).join('')}</div></div></div></div></section>
-  ${news.length?`<div class="w-news"><div class="w-wrap"><span class="tag2">NEWS</span>${news.slice(0,3).map(c=>`<button data-w-go="detail/${c.id}">${esc(tx(c,'title'))}</button>`).join('')}<button class="more" data-w-go="list/news">${tr('查看更多','More')} ›</button></div></div>`:''}
-  <section class="w-sec tint"><div class="w-wrap w-split"><div class="w-ph">${tr('安全视觉图','Security visual')}</div><div>
-    <h2 class="w-h2">${tr('资金异常，我们负责到底','If something goes wrong with your money, we see it through')}</h2>
-    <p class="w-sub" style="font-size:16px;color:var(--w-ink2)">${tr('账户有多重身份验证，每笔订单都能在 App 里查到进度。因平台系统或操作原因导致的资金异常，我们负责到底。','Your account is protected by multi-factor verification, and every order can be tracked in the app. If funds go wrong because of our systems or operations, we see it through.')}</p></div></div></section>
   <section class="w-sec w-calc-sec" id="w-calc"><div class="w-wrap w-split"><div><h2 class="w-h2" style="font-size:44px">${tr('先算清楚，<br>再换','Check first,<br>then exchange')}</h2><p style="margin:16px 0 0;color:#E6ECFF;font-size:16px;max-width:420px">${tr('输入金额，马上看到能换多少，换汇 0 手续费。','Enter an amount and see right away what you get. Zero exchange fees.')}</p></div>
-    <div class="w-calc"><h3>${tr('汇率计算器','Rate calculator')}<small id="wrl"></small></h3>
-      <label class="lab" for="wa">${tr('我拿出的','You send')}</label><div class="fld2"><select id="wf" aria-label="${tr('拿出的币种','From')}"></select><input id="wa" inputmode="decimal" value="10,000" autocomplete="off"></div>
-      <div class="q"><button data-w-add="100">+100</button><button data-w-add="500">+500</button><button data-w-add="1000">+1000</button></div>
-      <div class="sw2"><span></span><button id="wsw" aria-label="${tr('交换币种','Swap')}">⇅</button><span></span></div>
-      <span class="lab">${tr('我得到的','You get')}</span><div class="fld2"><select id="wt" aria-label="${tr('得到的币种','To')}"></select><output id="wo"></output></div>
-      <button class="w-btn blue" data-w-dl>${tr('下载 App 换汇','Get the app to exchange')}</button>
-      <div class="fine">${tr('更新时间','Updated')} <span class="mono">${fmt(now())}</span> (UTC+8) · ${tr('汇率仅供参考，以实际交易为准','Rates for reference only')}</div></div></div></section>
-  <section class="w-sec"><div class="w-wrap"><div class="w-g4" style="margin-top:0">${[['10 万+','100K+','用户在用','people use Yihuan'],['8','8','个国家和地区','countries & regions'],['40+','40+','种货币互换','currencies'],['7×24','24/7','中文 / 英文 / 越南语客服','support in Chinese, English, Vietnamese']].map(x=>`<div style="text-align:center;padding:12px"><div class="w-big" style="font-size:40px">${tr(x[0],x[1])}</div><div style="color:var(--w-ink2)">${tr(x[2],x[3])}</div></div>`).join('')}</div></div></section>
+    ${wCalcBox()}</div></div></section>
+  <section class="w-sec tint"><div class="w-wrap" style="max-width:860px;text-align:center"><div>
+    <h2 class="w-h2 c">${tr('资金异常，我们负责到底','If something goes wrong with your money, we see it through')}</h2>
+    <p class="w-sub" style="font-size:16px;color:var(--w-ink2)">${tr('账户有多重身份验证，每笔订单都能在 App 里查到进度。因平台系统或操作原因导致的资金异常，我们负责到底。','Your account is protected by multi-factor verification, and every order can be tracked in the app. If funds go wrong because of our systems or operations, we see it through.')}</p></div></div></section>
   <section class="w-sec tint" style="padding:56px 0"><div class="w-wrap"><h2 class="w-h2" style="font-size:28px">${tr('用过的人怎么说','What people say')}</h2>
     <div class="w-g3">${[
       ['提现失误，没有收到钱，但平台核实之后赔付了，大品牌还是有信誉','A withdrawal went wrong and I did not get the money, but after checking, the platform compensated me. A big brand you can trust.','用','易换用户','Yihuan user',''],
       ['节假日送现金免手续费，五星好评。','Free cash delivery over the holidays. Five stars.','用','易换用户','Yihuan user',tr('节假日活动期间','During a holiday promotion')],
       ['汇率很划算，送现金也很快；半夜提现都很快到账，推荐朋友使用','Great rates and fast cash delivery. Even late-night withdrawals arrive quickly. I recommend it to friends.','用','易换用户','Yihuan user','']
     ].map(r=>`<figure style="margin:0;background:#fff;border:1px solid var(--w-line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:16px"><blockquote style="margin:0;font-size:17px;line-height:1.75;color:var(--w-ink);flex:1">“${tr(r[0],r[1])}”</blockquote>${r[5]?`<span class="w-tag">${r[5]}</span>`:''}<figcaption style="display:flex;align-items:center;gap:10px;color:var(--w-ink3);font-size:14px"><span style="width:34px;height:34px;border-radius:50%;background:#D4DEFA;color:var(--w-deep);display:grid;place-items:center;font-weight:700">${r[2]}</span>${tr(r[3],r[4])}</figcaption></figure>`).join('')}</div></div></section>
+  ${news.length?`<div class="w-news"><div class="w-wrap"><span class="tag2">NEWS</span>${news.slice(0,3).map(c=>`<button data-w-go="detail/${c.id}">${esc(tx(c,'title'))}</button>`).join('')}<button class="more" data-w-go="list/news">${tr('查看更多','More')} ›</button></div></div>`:''}
   ${wManage(tr('下载 App，换汇、汇款、充值都在一个地方','Exchange, send and top up in one app'),tr('一个账户管好 40+ 种货币，随时随地汇款、转账、提现、消费和收款。','One account for 40+ currencies: send, transfer, withdraw, spend and receive anytime.'),true)}`;
+}
+/* 汇率计算器：首页和汇率页共用同一组件、同一数据源（开发接汇率接口） */
+let RATE_FAIL=false;  // 接口失败状态，原型里可在控制台设为 true 查看
+const RATE_AT=()=>fmt(now());
+function wCalcBox(){
+  if(RATE_FAIL)return `<div class="w-calc w-calc-err"><h3>${tr('汇率计算器','Rate calculator')}</h3><div class="err"><b>${tr('汇率暂时获取失败','Rates are unavailable right now')}</b><p>${tr('请稍后重试，或在 App 内查看实时汇率。','Please try again, or check live rates in the app.')}</p><button class="w-btn line sm" data-w-retry>${tr('重新获取','Try again')}</button></div><button class="w-btn blue" data-w-dl>${tr('下载 App 换汇','Get the app to exchange')}</button></div>`;
+  return `<div class="w-calc"><h3>${tr('汇率计算器','Rate calculator')}<small id="wrl"></small></h3>
+      <label class="lab" for="wa">${tr('我拿出的','You send')}</label><div class="fld2"><select id="wf" aria-label="${tr('拿出的币种','From')}"></select><input id="wa" inputmode="decimal" value="10,000" autocomplete="off"></div>
+      <div class="q"><button data-w-add="100">+100</button><button data-w-add="500">+500</button><button data-w-add="1000">+1000</button></div>
+      <div class="sw2"><span></span><button id="wsw" aria-label="${tr('交换币种','Swap')}">⇅</button><span></span></div>
+      <span class="lab">${tr('我得到的','You get')}</span><div class="fld2"><select id="wt" aria-label="${tr('得到的币种','To')}"></select><output id="wo"></output></div>
+      <div class="zf">${tr('换汇 0 手续费','Zero exchange fees')}</div>
+      <button class="w-btn blue" data-w-dl>${tr('下载 App 换汇','Get the app to exchange')}</button>
+      <div class="fine">${tr('更新时间','Updated')} <span class="mono">${RATE_AT()}</span> (UTC+8) · ${tr('汇率仅供参考，以实际交易为准','Rates for reference only')}</div></div>`;
 }
 function bindCalc(){
   const f=$('#wf'),t=$('#wt'),a=$('#wa');if(!f)return;
@@ -1618,7 +1644,10 @@ function bindCalc(){
   f.onchange=t.onchange=calc;$('#wsw').onclick=()=>{const v=f.value;f.value=t.value;t.value=v;calc()};
   document.querySelectorAll('[data-w-add]').forEach(b=>b.onclick=()=>{a.value=fm(p(a.value)+ +b.dataset.wAdd,f.value);calc()});calc();
 }
-const CURW=[{c:'PHP',n:'披索',e:'Peso',r:56.30},{c:'VND',n:'越南盾',e:'Dong',r:25400},{c:'CNY',n:'人民币',e:'Yuan',r:7.12},{c:'THB',n:'泰铢',e:'Baht',r:33.50},{c:'SGD',n:'新加坡元',e:'SG Dollar',r:1.29},{c:'USDT',n:'USDT',e:'USDT',r:1}];
+const CURW=[{c:'PHP',n:'披索',e:'Peso',r:56.30},{c:'VND',n:'越南盾',e:'Dong',r:25400},{c:'CNY',n:'人民币',e:'Yuan',r:7.12},{c:'THB',n:'泰铢',e:'Baht',r:33.50},{c:'SGD',n:'新加坡元',e:'SG Dollar',r:1.29},{c:'USDT',n:'USDT',e:'USDT',r:1},{c:'USD',n:'美元',e:'US Dollar',r:0.999},{c:'TWD',n:'新台币',e:'Taiwan Dollar',r:32.40}];
+// 同一数据源：1 单位 a 能换多少 b（开发接汇率接口后替换 r 值）
+const rateOf=(a,b)=>{const A=CURW.find(x=>x.c===a),B=CURW.find(x=>x.c===b);return B.r/A.r};
+const fmtRate=(v,c)=>v>=100?Math.round(v).toLocaleString('en-US'):v>=1?v.toFixed(2):v.toPrecision(4);
 
 /* ---------- 实时汇率 ---------- */
 const RCOLS=[['泰铢','Baht','转账','Transfer','THB','#6A4BC4'],['泰铢','Baht','现金','Cash','THB','#6A4BC4'],['USDT','USDT','数字货币','Crypto','USDT','#2F9E7A'],['菲美金','PH USD','USD','USD','USD','#3B5998'],['柬美金','KH USD','USD','USD','USD','#3B5998'],['港币','HKD','存现','Cash deposit','HKD','#C0392B'],['越南盾','Dong','转账','Transfer','VND','#C0392B'],['台币','TWD','转账','Transfer','TWD','#1F5FA8'],['新币','SGD','转账','Transfer','SGD','#0F7C8C'],['韩元','Won','转账','Transfer','KRW','#14213D']];
@@ -1629,12 +1658,12 @@ function wRates(){
     <div><h1 class="w-h2" style="font-size:40px">${tr('换汇快，汇率透明','Fast exchange, clear rates')}</h1><p class="w-sub" style="font-size:16px">${tr('汇率实时更新，下单前就能看到到账金额。','Rates update live, and you see what you get before you order.')}</p>
       <ul class="w-ticks"><li>${tr('无需人工审核','No manual review')}</li><li>${tr('支持法币直接兑换 USDT','Swap fiat straight to USDT')}</li><li>${tr('资金可直达交易所','Send funds straight to exchanges')}</li></ul>
       <div style="display:flex;gap:12px;margin-top:26px;flex-wrap:wrap"><button class="w-btn blue sm" data-w-go="academy">${tr('新手教程','Beginner guides')}</button><button class="w-btn line sm" data-w-scroll="w-how">${tr('如何兑换','How to exchange')}</button></div></div>
-    <div class="w-x"><span class="pill">${tr('今日汇率（实时）','Today (live)')} 1 USDT = 56.30 PHP</span><label class="lab" for="wxi">${tr('您转出','You send')}</label><div class="fx"><input id="wxi" inputmode="decimal" value="1,000" autocomplete="off"><b>USDT</b></div><div class="zf">${tr('换汇 0 手续费','Zero exchange fees')}</div><span class="lab">${tr('您将收到','You receive')}</span><div class="fx"><output id="wxo">56,300</output><b>PHP</b></div><button class="w-btn blue" style="width:100%;margin-top:20px" data-w-dl>${tr('立即下载易换','Download Yihuan')}</button></div></div></div></section>
+    <div>${wCalcBox()}</div></div></div></div></section>
   <section class="w-sec" style="padding-top:24px"><div class="w-wrap"><h2 class="w-h2">${tr('今日汇率','Today’s rates')} <span class="w-cd"><span id="w-cd">15</span>s ⟳</span></h2><p class="w-sub">${tr('仅展示常用币种，完整汇率以 App 为准','Common currencies only. See the app for full rates.')}</p>
     <div class="w-tblw"><table class="w-tbl"><thead><tr><th>${tr('换出币种 → 换入币种','From → To')}</th>${RCOLS.map(c=>`<th>${tr(c[0],c[1])}<small>${tr(c[2],c[3])}</small></th>`).join('')}</tr></thead>
     <tbody>${RROWS.map(r=>`<tr><td><b>${tr(r[0],r[1])}</b><small>${r[2]}</small></td>${r[3].map(v=>`<td class="${v==='—'?'na':'v'}">${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div></section>
   <section class="w-sec tint"><div class="w-wrap"><h2 class="w-h2 c">${tr('热门货币兑换组合','Popular currency pairs')}</h2><p class="w-sub c">Popular currency exchange combinations</p>
-    <div class="w-g4">${COMBO.map(x=>`<button class="w-combo" data-w-soon><span class="pr"><span class="w-c" style="background:${x[1]}">${x[0]}</span>→<span class="w-c" style="background:${x[3]}">${x[2]}</span></span><span class="vv"><span>${x[4]}<small>${tr(x[5],x[6])}</small></span><span style="text-align:right">0.0178<small>USDT</small></span></span></button>`).join('')}</div></div></section>
+    <div class="w-g4">${COMBO.map(x=>`<button class="w-combo" data-w-pair="${x[0]}:${x[2]}:${x[4]}" title="${tr('在计算器里打开','Open in calculator')}"><span class="pr"><span class="w-c" style="background:${x[1]}">${x[0]}</span>→<span class="w-c" style="background:${x[3]}">${x[2]}</span></span><span class="vv"><span>${x[4]}<small>${x[0]}</small></span><span style="text-align:right">${fmtRate(+x[4]*rateOf(x[0],x[2]),x[2])}<small>${x[2]}</small></span></span></button>`).join('')}</div></div></section>
   <section class="w-sec" id="w-how"><div class="w-wrap"><h2 class="w-h2 c">${tr('如何兑换USDT','How to get USDT')}</h2><div class="w-g3">
     ${[['01','输入数值','Enter an amount','在输入框中输入要转换的数值','Type the amount to convert.'],['02','选择币种','Choose currencies','选好换出和换入的币种，比如 PHP 换 USDT。','Pick the currencies, for example PHP to USDT.'],['03','自动换算','See the result','货币转换器将计算出 PHP 对 USDT 的换算数值。','The converter shows how much USDT you get.']].map(s=>`<div class="w-step"><em>${s[0]}</em><i></i><b>${tr(s[1],s[2])}</b><p>${tr(s[3],s[4])}</p></div>`).join('')}</div></div></section>
   ${wManage(tr('下载 App，按当前汇率下单','Order at today’s rate in the app'),tr('汇率随时在 App 里查看，下单前确认到账金额。','Check rates anytime in the app and confirm the amount before you order.'),true)}`;
@@ -1649,8 +1678,8 @@ function wService(){
       <div class="w-g2" style="margin-top:24px"><div class="w-x" id="w-cur" style="padding:18px"><b>${tr('常用货币','Common currencies')}</b><div class="w-chips" style="margin-top:10px">${[['USDT','USDT'],['美元','USD'],['越南盾','VND'],['菲律宾比索','PHP'],['马币','MYR'],['新币','SGD'],['港币','HKD'],['日元','JPY'],['泰铢','THB']].map(([z,e])=>`<span>${tr(z,e)}</span>`).join('')}</div></div>
       <div class="w-x" id="w-reg" style="padding:18px"><b>${tr('服务地区','Locations')}</b><div class="w-chips" style="margin-top:10px">${REG.map(([z,e])=>`<span>${tr(z,e)}</span>`).join('')}</div></div></div>
       <p class="w-note">${tr('价格透明 · 进度可查 · 7×24 在线客服','Transparent pricing · Trackable orders · 24/7 support')}</p></div>
-    <div class="w-box"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><div><small style="color:var(--w-ink3)">${tr('实时汇率（示意）','Live rate (sample)')}</small><b style="display:block;font-size:18px">${tr('汇率实时更新','Rates update live')}</b></div><button class="w-btn blue sm" data-w-dl>${tr('立即下单','Order now')}</button></div>
-      <div class="w-ph" style="min-height:220px;margin-top:20px">USDT ⇄ PHP</div>
+    <div class="w-box"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><div><small style="color:var(--w-ink3)">${tr('更新时间','Updated')} <span class="mono">${RATE_AT()}</span></small><b style="display:block;font-size:18px">${tr('常用汇率','Popular rates')}</b></div><button class="w-btn blue sm" data-w-dl>${tr('立即下单','Order now')}</button></div>
+      <div class="w-rlist">${[['USDT','PHP'],['USDT','VND'],['USDT','CNY'],['USDT','THB'],['SGD','VND'],['CNY','PHP']].map(([f,t])=>{const A=CURW.find(x=>x.c===f),Bc=CURW.find(x=>x.c===t),v=Bc.r/A.r;return `<div><span>1 ${f}</span><b class="mono">${v>=100?Math.round(v).toLocaleString('en-US'):v.toFixed(v>=1?2:4)} ${t}</b></div>`}).join('')}</div>
       <div class="w-g3" style="margin-top:18px;gap:10px">${[['到账','Arrival','分钟级到账','Within minutes'],['范围','Coverage','8 个国家和地区','8 countries & regions'],['客服','Support','7×24 中 / 英 / 越','24/7 · ZH / EN / VI']].map(x=>`<div style="background:var(--w-tint);border-radius:12px;padding:12px"><small style="color:var(--w-ink3)">${tr(x[0],x[1])}</small><b style="display:block;font-size:14px">${tr(x[2],x[3])}</b></div>`).join('')}</div></div></div></section>
   <section class="w-sec"><div class="w-wrap"><h2 class="w-h2 c">${tr('我们的服务','What you can do')}</h2><div class="w-g4">
     ${[['多币种充值提现','Top up & withdraw','支持 40+ 种货币','40+ currencies'],['跨境转账','Cross-border transfer','海外汇款，分钟级到账','Overseas transfers within minutes'],['多币种兑换','Currency exchange','换汇 0 手续费','Zero exchange fees'],['娱乐模式','Entertainment mode','支持 MK / 德信充值提现','Top up and withdraw with MK / Dexin'],['生活充值','Bill payments','话费即充即用','Instant phone top-ups'],['安全保障','Security','多重身份验证','Multi-factor verification'],['账户管理','Account','多币种资产一处查看','All your currencies in one place'],['7×24 客服','24/7 support','中文 / 英文 / 越南语','Chinese, English, Vietnamese']].map((x,i)=>`<div class="w-svc"><div class="t"><i></i><em>0${i+1}</em></div><div class="b"><b>${tr(x[0],x[1])}</b><small>${tr(x[2],x[3])}</small></div></div>`).join('')}</div></div></section>
@@ -1739,32 +1768,34 @@ function wAbout(){
 }
 
 /* ---------- 商家合作申请 ---------- */
-const COUNTRY=[['菲律宾','Philippines'],['越南','Vietnam'],['泰国','Thailand'],['柬埔寨','Cambodia'],['马来西亚','Malaysia'],['新加坡','Singapore'],['阿联酋','UAE'],['中国','China'],['台湾','Taiwan'],['香港','Hong Kong'],['其他','Other']];
+const COUNTRY=[...REG,['泰国','Thailand'],['阿联酋','UAE'],['中国','China'],['台湾','Taiwan'],['其他','Other']];  // 先列站点服务的 8 个地区
 const BIZ=[['支付通道','Payment channel'],['汇款服务','Remittance'],['线下兑换门店','Exchange store'],['跨境贸易','Cross-border trade'],['黄金交易','Gold trading'],['其他','Other']];
-const VOL=[['≤ 100 万 USD','≤ USD 1M'],['100–500 万 USD','USD 1–5M'],['≥ 500 万 USD','≥ USD 5M']];
+const VOL=[['≤ 100 万 USD','≤ USD 1M'],['100–500 万 USD','USD 1–5M'],['≥ 500 万 USD','≥ USD 5M']];  // 统一按美元等值填写
 const METH=[['Telegram','Telegram'],['WhatsApp','WhatsApp'],['手机','Phone'],['邮箱','Email']];
+let APPLY_FAIL=false;  // 接口失败状态，原型里可在控制台设为 true 查看
 function newWF(){const a=2+Math.floor(Math.random()*8),b=2+Math.floor(Math.random()*8);return {name:'',person:'',method:'Telegram',handle:'',country:'',biz:'',vol:'',desc:'',files:[],cap:'',agree:false,ca:a,cb:b,err:{}}}
 function wApply(){
   if(!WF)WF=newWF();const F=WF,er=F.err;
-  if(WDONE)return `<section class="w-phero"><div class="w-wrap"><div class="w-box w-ok" style="max-width:720px;margin:0 auto"><i>✓</i><h2>${tr('申请已提交','Application received')}</h2><p>${tr('申请编号','Reference')} <b class="mono">${WDONE}</b></p><p>${tr('商务团队将在 2 个工作日内通过您留下的联系方式与您联系。','Our partnerships team will contact you within 2 business days.')}</p><div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap"><button class="w-btn line sm" data-w-go="home">${tr('返回首页','Back to home')}</button><button class="w-btn blue sm" id="wagain">${tr('再提交一份','Submit another')}</button></div></div></div></section>`;
+  if(WDONE)return `<section class="w-phero"><div class="w-wrap"><div class="w-box w-ok" style="max-width:720px;margin:0 auto"><i>✓</i><h2>${tr('申请已提交','Application received')}</h2><p>${tr('申请编号','Reference')} <b class="mono">${WDONE}</b></p><p>${tr('商务团队将在 2 个工作日内通过您留下的联系方式与您联系。','Our partnerships team will contact you within 2 business days.')}</p><p class="w-sub" style="font-size:14px">${tr('申请编号仅作为客服 / 运营核对凭证，本期不支持在官网查询申请进度。如 2 个工作日内未收到联系，请联系客服并提供申请编号。','Keep this reference for support. Progress cannot be checked on the website yet. If we have not contacted you within 2 business days, contact support with this reference.')}</p><div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap"><button class="w-btn line sm" data-w-go="home">${tr('返回首页','Back to home')}</button><button class="w-btn blue sm" id="wagain">${tr('再提交一份','Submit another')}</button></div></div></div></section>`;
   const fld=(k,lab,inner,full,req=true)=>`<div class="w-f ${full?'full':''} ${er[k]?'er':''}"><label class="${req?'rq':''}" for="wf-${k}">${lab}</label>${inner}${er[k]?`<span class="em">${er[k]}</span>`:''}</div>`;
   const opt=(arr,v)=>`<option value="">${tr('请选择','Select')}</option>`+arr.map(([z,e])=>`<option value="${z}" ${v===z?'selected':''}>${tr(z,e)}</option>`).join('');
   return `<section class="w-phero"><div class="w-wrap" style="max-width:920px">
     <div class="w-crumb"><button data-w-go="home">${tr('首页','Home')}</button>/<button data-w-go="about">${tr('关于我们','About us')}</button>/<span>${tr('商家合作','Partner with us')}</span></div>
     <h1 class="w-h2" style="font-size:36px">${tr('商家合作申请','Partnership application')}</h1><p class="w-sub" style="font-size:16px">${tr('提交后，商务团队将在 2 个工作日内与您联系。','We will contact you within 2 business days.')}</p>
+    ${F.msg?`<div class="w-alert ${F.msg.k}" role="alert">${F.msg.t}</div>`:''}
     <form class="w-box w-form" id="wform" novalidate style="margin-top:28px">
       ${fld('name',tr('商户名称','Business name'),`<input id="wf-name" maxlength="60" value="${esc(F.name)}">`)}
       ${fld('person',tr('联系人','Contact person'),`<input id="wf-person" maxlength="30" value="${esc(F.person)}">`)}
       ${fld('handle',tr('联系方式','Contact'),`<div class="cm"><select id="wf-method" aria-label="${tr('联系方式类型','Contact type')}">${METH.map(([z,e])=>`<option value="${z}" ${F.method===z?'selected':''}>${tr(z,e)}</option>`).join('')}</select><input id="wf-handle" value="${esc(F.handle)}" placeholder="${{Telegram:'@username',WhatsApp:'+63 900 000 0000','手机':'+63 900 000 0000','邮箱':'name@company.com'}[F.method]}"></div>`,true)}
       ${fld('country',tr('国家 / 地区','Country / region'),`<select id="wf-country">${opt(COUNTRY,F.country)}</select>`)}
       ${fld('biz',tr('业务类型','Business type'),`<select id="wf-biz">${opt(BIZ,F.biz)}</select>`)}
-      ${fld('vol',tr('预计月交易量','Monthly volume'),`<select id="wf-vol">${opt(VOL,F.vol)}</select>`)}
+      ${fld('vol',tr('预计月交易量（美元等值）','Monthly volume (USD equivalent)'),`<select id="wf-vol">${opt(VOL,F.vol)}</select>`)}
       <div></div>
       ${fld('desc',tr('合作说明','About your business'),`<textarea id="wf-desc" rows="4" maxlength="500" placeholder="${tr('简单介绍您的业务和合作需求','Tell us about your business and what you need')}">${esc(F.desc)}</textarea>`,true,false)}
       <div class="w-f full"><span class="w-lb">${tr('资质附件（选填，最多 3 张，JPG / PNG，≤ 5MB）','Licences (optional, up to 3 images, ≤ 5MB)')}</span><div class="w-upl">${F.files.map((f,i)=>`<div class="f"><img src="${f.src}" alt=""><button type="button" data-w-rmf="${i}" aria-label="${tr('删除','Remove')}">×</button></div>`).join('')}${F.files.length<3?`<label>+ ${tr('上传','Upload')}<input type="file" id="wf-file" accept="image/jpeg,image/png,image/webp"></label>`:''}</div></div>
       ${fld('cap',tr('验证码','Verification'),`<div class="w-cap"><span>${F.ca} + ${F.cb} = ?</span><input id="wf-cap" inputmode="numeric" value="${esc(F.cap)}" style="width:120px"></div>`)}
       <div class="w-f full ${er.agree?'er':''}"><label class="chk" style="font-size:14px"><input type="checkbox" id="wf-agree" ${F.agree?'checked':''}>${tr('我已阅读并同意','I agree to the')} <button type="button" class="w-more" data-w-go="page/privacy" style="padding:0">${tr('《隐私政策》','Privacy policy')}</button></label>${er.agree?`<span class="em">${er.agree}</span>`:''}</div>
-      <div class="full"><button class="w-btn blue" type="submit" style="min-width:200px">${tr('提交申请','Submit')}</button></div>
+      <div class="full"><button class="w-btn blue" type="submit" style="min-width:200px" ${F.busy?'disabled':''}>${F.busy?tr('提交中…','Submitting…'):tr('提交申请','Submit')}</button></div>
     </form></div></section>`;
 }
 function bindApply(){
@@ -1781,9 +1812,26 @@ function bindApply(){
     if(!F.country)er.country=pick;if(!F.biz)er.biz=pick;if(!F.vol)er.vol=pick;
     if(+F.cap!==F.ca+F.cb)er.cap=tr('验证码错误','Incorrect answer');if(!F.agree)er.agree=tr('请阅读并同意隐私政策','Please accept the privacy policy');
     F.err=er;if(Object.keys(er).length){if(er.cap){const a=2+Math.floor(Math.random()*8),b=2+Math.floor(Math.random()*8);F.ca=a;F.cb=b;F.cap=''}renderSite(['apply'],true);const x=document.querySelector('.w-f.er');x&&x.scrollIntoView({behavior:'smooth',block:'center'});return}
+    // 防重复：同一联系方式已有「待审核 / 审核中」的申请时，不再生成新单
+    const dup=S.apps.find(a=>a.handle.replace(/\s/g,'').toLowerCase()===h.replace(/\s/g,'').toLowerCase()&&(a.status==='pending'||a.status==='reviewing'));
+    if(dup){F.msg={k:'warn',t:tr(`该联系方式已提交过申请（编号 ${dup.id}），请勿重复提交，商务团队会尽快联系您。`,`An application with this contact already exists (${dup.id}). Please wait for our team to contact you.`)};renderSite(['apply'],true);window.scrollTo({top:0,behavior:'smooth'});return}
+    F.busy=true;F.msg=null;renderSite(['apply'],true);
+    setTimeout(()=>{F.busy=false;
+      if(APPLY_FAIL){F.msg={k:'err',t:tr('提交失败，请检查网络后重试。已填写的内容已保留。','Submission failed. Check your connection and try again. Your answers are kept.')};renderSite(['apply'],true);window.scrollTo({top:0,behavior:'smooth'});return}
     S.seq.HZ++;const d=new Date(),id='HZ'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+pad(S.seq.HZ).padStart(3,'0');
     S.apps.unshift({id,name:F.name.trim(),person:F.person.trim(),method:F.method,handle:h,country:F.country,biz:F.biz,vol:F.vol,desc:F.desc.trim()||'—',files:F.files.map(f=>({src:f.src,w:0,h:0,name:f.name})),at:now(),owner:'',status:'pending',notes:[]});
-    WDONE=id;WF=null;renderSite(['apply']);};
+    WDONE=id;WF=null;renderSite(['apply']);},900);};
+}
+
+/* ---------- 下载弹窗：电脑端扫码；手机端不显示二维码，直接给按钮 ---------- */
+function openDownload(){
+  modal({title:tr('下载易换 App','Get the Yihuan app'),body:`<div class="w-qrm"><img class="pc-only" src="${qrImg()}" alt=""><div style="display:flex;flex-direction:column;gap:10px;min-width:220px">
+    <b class="pc-only">${tr('手机扫码下载','Scan with your phone')}</b>
+    <button class="btn pri" onclick="toast(tr('开始下载 iPhone 安装包（原型示意）','Downloading the iPhone package (prototype)'))">iPhone</button>
+    <span class="hint">${tr('安装后需在「设置 → 通用 → VPN 与设备管理」里信任','After installing, trust it in Settings → General → VPN & Device Management')}</span>
+    <button class="btn pri" onclick="toast(tr('开始下载 Android 安装包（原型示意）','Downloading the Android package (prototype)'))">Android</button>
+    <span class="hint">${tr('华为鸿蒙、OPPO 等机型如被拦截，请看对应安装教程','If Huawei, OPPO or other phones block it, see the install guides')}</span></div></div>
+    <div class="w-dlhelp">${tr('下载或安装遇到问题？','Trouble downloading or installing?')} <button class="lnk" onclick="closeLayer();location.hash='#/site/list/tutorial/c1'">${tr('查看安装教程','Install guides')}</button> · <button class="lnk" onclick="toast(tr('打开在线客服（原型示意）','Opening live chat (prototype)'))">${tr('联系客服','Contact support')}</button></div>`});
 }
 
 /* ---------- 渲染 ---------- */
@@ -1812,12 +1860,14 @@ function renderSite(parts,keep){
   const wq=$('#wq');wq&&(wq.oninput=()=>{WL.q=wq.value;WL.page=1;clearTimeout(wq._t);wq._t=setTimeout(()=>{renderSite(parts,true);const i=$('#wq');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)});
   $('#wlang').onchange=e=>{SL=e.target.value;renderSite(parts,true)};
   if(WPEND){const t=document.getElementById(WPEND);WPEND=null;t&&setTimeout(()=>window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-80,behavior:'smooth'}),30)}
-  $('#site').onclick=e=>{const dr=$('#site .w-drawer');if(e.target.closest('[data-w-menu]')){dr.hidden=!dr.hidden;return}if(e.target.closest('.w-drawer-panel button'))dr.hidden=true;if(e.target.tagName==='IMG'&&e.target.closest('.w-art .rt'))return openLB({src:e.target.src,w:e.target.naturalWidth,h:e.target.naturalHeight,name:''});const t=e.target.closest('[data-w-go],[data-w-scroll],[data-w-dl],[data-w-kf],[data-w-soon],[data-w-proto],[data-w-back],[data-w-img],[data-w-pg]');if(!t||t.disabled)return;
+  $('#site').onclick=e=>{const dr=$('#site .w-drawer');if(e.target.closest('[data-w-menu]')){dr.hidden=!dr.hidden;return}if(e.target.closest('.w-drawer-panel button'))dr.hidden=true;if(e.target.tagName==='IMG'&&e.target.closest('.w-art .rt'))return openLB({src:e.target.src,w:e.target.naturalWidth,h:e.target.naturalHeight,name:''});const t=e.target.closest('[data-w-go],[data-w-scroll],[data-w-dl],[data-w-retry],[data-w-pair],[data-w-kf],[data-w-soon],[data-w-proto],[data-w-back],[data-w-img],[data-w-pg]');if(!t||t.disabled)return;
     if(t.dataset.wGo!==undefined){if(t.dataset.wTo)WPEND=t.dataset.wTo;const h='#/site/'+t.dataset.wGo;if(location.hash===h){renderSite(t.dataset.wGo.split('/'),!!WPEND)}else location.hash=h;return}
     if(t.dataset.wScroll){const el=document.getElementById(t.dataset.wScroll);el&&window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-80,behavior:'smooth'});return}
     if(t.dataset.wPg){WL.page=+t.dataset.wPg;renderSite(parts,false);return}
     if(t.dataset.wImg!==undefined)return openLB(WIMGS[+t.dataset.wImg]);
-    if(t.hasAttribute('data-w-dl'))return modal({title:tr('扫码下载易换 App','Download Yihuan'),body:`<div class="w-qrm"><img src="${qrImg()}" alt=""><div style="display:flex;flex-direction:column;gap:10px"><b>${tr('手机扫码下载','Scan with your phone')}</b><button class="btn" onclick="toast('跳转 App Store（原型示意）')">iPhone</button><button class="btn" onclick="toast('下载 Android 安装包（原型示意）')">Android</button><button class="btn ghost" onclick="closeLayer();location.hash='#/site/list/tutorial/c1'">${tr('安装教程','Install guide')}</button></div></div>`});
+    if(t.hasAttribute('data-w-dl'))return openDownload();
+    if(t.dataset.wPair){const [a,b,n]=t.dataset.wPair.split(':'),f=$('#wf'),to=$('#wt'),am=$('#wa');if(f&&to&&am){f.value=a;to.value=b;am.value=(+n).toLocaleString('en-US');am.dispatchEvent(new Event('input'));f.dispatchEvent(new Event('change'));const box=document.querySelector('.w-calc');window.scrollTo({top:box.getBoundingClientRect().top+window.scrollY-100,behavior:'smooth'})}return}
+    if(t.hasAttribute('data-w-retry')){RATE_FAIL=false;renderSite(parts,true);return}
     if(t.hasAttribute('data-w-kf'))return toast(tr('打开在线客服（原型示意）','Opening live chat (prototype)'));
     if(t.hasAttribute('data-w-proto'))return toast(tr('打开 Telegram 频道（原型示意）','Opening Telegram (prototype)'));
     if(t.hasAttribute('data-w-soon'))return toast(tr('页面待设计','Coming soon'));
