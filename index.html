@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>易换运营后台</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -508,7 +513,7 @@ table.w-tbl{width:100%;border-collapse:collapse;min-width:1040px;font-variant-nu
 .w-art .st .h{display:flex;gap:12px}
 .w-art .st .n{width:28px;height:28px;border-radius:50%;background:var(--w-blue);color:#fff;display:grid;place-items:center;font-size:13px;flex-shrink:0}
 .w-art .st small{display:block;color:var(--w-ink3);margin-top:2px}
-.w-art img{width:100%;height:auto;display:block;border-radius:12px;margin-top:12px;cursor:zoom-in}
+.w-art figure img,.w-art .st img{width:100%;height:auto;display:block;border-radius:12px;margin-top:12px;cursor:zoom-in}
 .w-art figure{margin:0}
 .w-art figcaption{text-align:center;font-size:13px;color:var(--w-ink3);margin-top:8px}
 .w-art blockquote{margin:0;border-left:4px solid var(--w-blue);background:#F6F8FD;padding:12px 18px;border-radius:0 12px 12px 0;color:var(--w-ink2)}
@@ -580,6 +585,19 @@ table.w-tbl{width:100%;border-collapse:collapse;min-width:1040px;font-variant-nu
   .w-hd .w-wrap{gap:12px;padding-inline:16px}.w-wrap{padding-inline:16px}.w-tools .lbl{display:none}
   .w-g4,.w-g2,.w-form,.w-pn{grid-template-columns:1fr}.w-h2{font-size:26px}.w-sec{padding:48px 0}.w-box{padding:22px}
 }
+/* 手机端：导航收进菜单抽屉（与 H5 一致：右侧 2/3 宽、浅蓝底、无动画） */
+.w-burger{display:none}
+.w-drawer{position:fixed;inset:0;z-index:60}
+.w-drawer-bg{position:absolute;inset:0;background:rgba(14,26,52,.35)}
+.w-drawer-panel{position:absolute;top:0;right:0;bottom:0;width:66%;max-width:320px;background:#EEF3FE;padding:84px 20px 24px;display:flex;flex-direction:column;gap:4px}
+.w-drawer-panel>button:not(.w-btn){height:48px;border:0;background:none;text-align:left;font-size:16px;color:var(--w-ink);border-radius:12px;padding:0 14px;cursor:pointer}
+.w-drawer-panel>button.on{background:#fff;color:var(--w-blue);font-weight:600}
+@media (max-width:640px){
+  .w-nav{display:none}.w-burger{display:inline-flex}.w-hd .w-wrap{justify-content:space-between;height:60px}
+  .w-tools{gap:2px}.w-tool{padding:0 6px}
+  .w-news .w-wrap{gap:12px}.w-news button:not(.more){display:none}.w-news button:not(.more):first-of-type{display:block;flex:1;max-width:none}
+  .w-crumb{flex-wrap:wrap}
+}
 .rte-bar{display:flex;gap:4px;flex-wrap:wrap;align-items:center;padding:6px;border:1px solid var(--line);border-bottom:0;border-radius:8px 8px 0 0;background:#FAFBFD}
 .tb{height:28px;min-width:30px;padding:0 8px;border:1px solid transparent;border-radius:6px;background:none;cursor:pointer;font-size:12.5px;color:var(--ink);display:inline-flex;align-items:center;justify-content:center}
 .tb:hover{background:#fff;border-color:var(--line)}
@@ -588,7 +606,7 @@ table.w-tbl{width:100%;border-collapse:collapse;min-width:1040px;font-variant-nu
 .rte{min-height:120px;max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:0 0 8px 8px;padding:10px 12px;line-height:1.75;outline:none;background:#fff}
 .rte.ro{border-radius:8px;background:#F7F8FB}
 .rte:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(47,85,224,.12)}
-.rte:empty::before{content:"输入内容，可直接粘贴";color:var(--ink-3)}
+.rte:empty::before{content:"输入正文，可直接粘贴";color:var(--ink-3)}
 .rte p,.rt p{margin:0 0 .6em}
 .rte h2,.rt h2{font-size:20px;margin:.6em 0 .4em}
 .rte h3,.rt h3{font-size:17px;margin:.6em 0 .3em}
@@ -611,7 +629,7 @@ table.w-tbl{width:100%;border-collapse:collapse;min-width:1040px;font-variant-nu
 .rte td,.rte th{border:1px solid #D4DBEA;padding:6px 8px}
 .rt td,.rt th{padding:8px 10px;text-align:left}
 .rt img{cursor:zoom-in;border-radius:10px}
-.w-art .rt img{width:auto;max-width:100%;display:inline-block;margin:6px 0}
+.w-art .rt img{max-width:100%;height:auto;display:inline-block;margin:6px 0;border-radius:12px;cursor:zoom-in}
 .w-art .rt h2{margin:1.2em 0 .5em;font-size:22px;color:var(--w-ink)}
 .w-art .rt h2:first-child{margin-top:0}
 .w-art .rt h3{margin:1em 0 .4em;font-size:18px;color:var(--w-ink)}
@@ -634,6 +652,8 @@ table.w-tbl{width:100%;border-collapse:collapse;min-width:1040px;font-variant-nu
 .aprog small{color:var(--ink-3);font-size:11.5px}
 .tl li.sys .av{background:#EEF1F7;color:var(--ink-3)}
 </style>
+</head>
+<body>
 
 <div class="app">
   <aside class="side">
@@ -675,17 +695,16 @@ function cert(t){return cv(800,560,(x,w,h)=>{x.fillStyle='#FBFAF5';x.fillRect(0,
 
 /* ---------- 常量 ---------- */
 const TYPES={
-  tutorial:{zh:'教程',desc:'步骤 + 截图，支持长图',pre:'TU'},
-  faq:{zh:'常见问题',desc:'结论、原因、自查步骤',pre:'FQ'},
-  risk:{zh:'高风险预警',desc:'警示、常见话术、正确做法',pre:'RK'},
-  news:{zh:'行业热点',desc:'自由组合段落、图片、引用',pre:'NW'}
+  tutorial:{zh:'教程',desc:'官网 · 新手学院 / 新手教程',pre:'TU'},
+  faq:{zh:'常见问题',desc:'官网 · 新手学院 / 常见问题',pre:'FQ'},
+  risk:{zh:'高风险预警',desc:'官网 · 新手学院 / 防骗防盗号',pre:'RK'},
+  news:{zh:'行业热点',desc:'官网 · 首页新闻条 / 行业热点',pre:'NW'}
 };
 const ST={draft:'草稿',scheduled:'定时发布',published:'已发布',offline:'已下线'};
-const RISK=['高','中','低'];
 const PERM={edit:'编辑',publish:'发布',biz:'合作处理',admin:'系统管理'};
 
 /* ---------- 数据 ---------- */
-const S={me:'u5',members:[],cats:{},contents:[],slots:[],apps:[],notify:{tg:{on:true,target:'易换商务合作群'},mail:{on:false,to:'bd@yihuan.example'}},seq:{TU:7,FQ:5,RK:7,NW:5,HZ:13}};
+const S={me:'u5',members:[],cats:{},contents:[],slots:[],apps:[],notify:{tg:{on:true,target:'易换商务合作群'},mail:{on:false,to:'bd@yihuan.example'}},seq:{TU:10,FQ:5,RK:7,NW:5,HZ:13}};
 
 function seed(){
   S.members=[
@@ -698,7 +717,7 @@ function seed(){
   S.cats={
     tutorial:[C('c1','安装与信任','Install & trust'),C('c2','账号安全','Account security'),C('c3','合作方教程','Partner guides'),C('c4','基础功能','Basics')],
     faq:[C('c5','充值','Deposit'),C('c6','提现','Withdrawal'),C('c7','换汇','Exchange'),C('c8','账户','Account')],
-    risk:[C('c9','账号安全','Account security'),C('c10','下载安全','Download safety'),C('c11','转账安全','Transfer safety'),C('c12','高风险问题','High-risk scams')],
+    risk:[C('c9','账号安全','Account security'),C('c10','下载安全','Download safety'),C('c11','转账安全','Transfer safety'),Object.assign(C('c12','高风险问题','High-risk scams'),{red:true})],
     news:[C('c13','市场动态','Market'),C('c14','平台公告','Announcements'),C('c15','行业观察','Industry insight',false)]
   };
   const cv1=cover('安装与信任','#E3EBFF','#3A5BEF'),cv2=cover('安全设置','#E3EBFF','#2F55E0'),cv3=cover('添加联系人','#E3F0FF','#3D63E6'),
@@ -782,7 +801,7 @@ function seed(){
     h2('操作步骤')+ol(['首页点「充值」，选择币种和充值方式。','输入金额，生成订单。','按订单页显示的收款信息和金额付款，付款时填写订单号。','付款完成后点「我已付款」，上传付款截图。'])+pic(sDep)+
     warn('请按订单显示的金额付款，多付或少付都会导致到账变慢。订单超时后不要再付款。')+
     h2('多久到账')+p('到账时间以订单页显示为准，可以在「订单」里随时查看。'),
-    'How to deposit','',preset('tutorial','en'));
+    'How to deposit','','');
 
   const T6=B('如何提现','选好收款账户，输入金额和交易密码即可提交，进度在订单页查看。',
     h2('操作步骤')+ol(['首页点「提现」，选择币种。','选择已保存的收款账户，或新增一个。','输入金额，确认手续费和到账金额。','输入交易密码提交。'])+pic(sWd)+
@@ -794,7 +813,7 @@ function seed(){
     h2('Common mistakes')+ul(['The account holder name does not match your verified name.','Choosing the wrong network for a USDT withdrawal.']));
 
   const T7=B('如何换汇','输入金额就能看到到账数额，确认后一键兑换，换汇 0 手续费。',
-    h2('操作前准备')+p('（请填写：需要提前准备的东西）')+h2('操作步骤')+ol(['首页点「换汇」，选择换出和换入币种。','输入金额，页面会显示到账金额。','确认后输入交易密码。'])+pic(sFx),
+    h2('操作步骤')+ol(['首页点「换汇」，选择换出和换入币种。','输入金额，页面会显示到账金额。','确认后输入交易密码。'])+pic(sFx),
     'How to exchange currency','Enter an amount to see what you get, confirm, and exchange with zero fees.',
     h2('Steps')+ol(['Tap “Exchange” and pick the currencies.','Enter an amount to see what you receive.','Confirm and enter your trade PIN.'])+pic(sFx));
 
@@ -893,9 +912,99 @@ function seed(){
     h2('Staying safe')+ol(['Use trusted platforms and turn on every security setting.','Exchange only what you need. Crypto is not a guaranteed investment.','Ignore “trading signals” and “insider tips”.'])+
     warn('For education only. Not investment advice.'));
 
+  /* ---- 安装类教程：手机界面示意图（文字 + 图片） ---- */
+  // rows: [文字, 右侧('>'|'on'|'off'|'link'|''), 是否高亮]；dlg: {t,m,b:[按钮],hl:高亮按钮下标}
+  const phone=(title,rows,dlg)=>{const H=Math.max(1100,200+rows.length*104+120);return cv(750,H,(x,w,h)=>{
+    const F=(s,wt)=>`${wt||400} ${s}px "Noto Sans SC","PingFang SC",sans-serif`;
+    x.fillStyle='#F2F3F7';x.fillRect(0,0,w,h);x.fillStyle='#fff';x.fillRect(0,0,w,130);
+    x.fillStyle='#14213D';x.font=F(34,700);x.fillText('‹',32,90);x.textAlign='center';x.fillText(title,w/2,90);x.textAlign='left';
+    let y=170;rows.forEach(([t,r,hl])=>{x.fillStyle='#fff';rr(x,24,y,w-48,88,18);x.fill();
+      x.fillStyle=r==='link'?'#2F55E0':'#14213D';x.font=F(30,r==='link'?600:400);x.fillText(t,56,y+56);
+      if(r==='>'){x.fillStyle='#9AA3B5';x.font=F(34);x.fillText('›',w-80,y+58)}
+      if(r==='on'||r==='off'){x.fillStyle=r==='on'?'#2F55E0':'#D5DCEB';rr(x,w-150,y+26,84,40,20);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(r==='on'?w-86:w-130,y+46,16,0,7);x.fill()}
+      if(hl){x.strokeStyle='#E5484D';x.lineWidth=6;rr(x,18,y-6,w-36,100,22);x.stroke()}
+      y+=104});
+    if(dlg){x.fillStyle='rgba(0,0,0,.42)';x.fillRect(0,0,w,h);const dw=600,dh=420,dx=75,dy=h/2-dh/2;x.fillStyle='#fff';rr(x,dx,dy,dw,dh,28);x.fill();
+      x.fillStyle='#14213D';x.textAlign='center';x.font=F(32,700);x.fillText(dlg.t,w/2,dy+80);x.font=F(26);x.fillStyle='#3D4660';
+      (dlg.m||[]).forEach((s,i)=>x.fillText(s,w/2,dy+140+i*42));
+      const bw=(dw-60-(dlg.b.length-1)*20)/dlg.b.length;dlg.b.forEach((s,i)=>{const bx=dx+30+i*(bw+20),by=dy+dh-110;x.fillStyle=i===dlg.hl?'#2F55E0':'#EEF1F7';rr(x,bx,by,bw,76,38);x.fill();x.fillStyle=i===dlg.hl?'#fff':'#14213D';x.font=F(28,600);x.fillText(s,bx+bw/2,by+48);if(i===dlg.hl){x.strokeStyle='#E5484D';x.lineWidth=6;rr(x,bx-8,by-8,bw+16,92,44);x.stroke()}});
+      x.textAlign='left'}
+  })};
+  const tw=(zh,en)=>({zh,en});
+  const I={
+    ios1:tw(phone('Safari',[['yihuan 官网',''],['下载 App','link',true]],{t:'是否安装“易换”？',m:['安装完成后会出现在主屏幕'],b:['取消','安装'],hl:1}),
+            phone('Safari',[['Yihuan website',''],['Get the app','link',true]],{t:'Install “Yihuan”?',m:['It will appear on your Home Screen'],b:['Cancel','Install'],hl:1})),
+    ios2:tw(phone('通用',[['关于本机','>'],['软件更新','>'],['iPhone 存储空间','>'],['VPN 与设备管理','>',true],['日期与时间','>']]),
+            phone('General',[['About','>'],['Software Update','>'],['iPhone Storage','>'],['VPN & Device Management','>',true],['Date & Time','>']])),
+    ios3:tw(phone('VPN 与设备管理',[['企业级 App',''],['[开发者名称]','>',true]]),phone('VPN & Device Management',[['Enterprise App',''],['[Developer name]','>',true]])),
+    ios4:tw(phone('[开发者名称]',[['信任“[开发者名称]”','link',true],['验证 App','link']],{t:'信任此开发者？',m:['信任后即可打开该开发者的 App'],b:['取消','信任'],hl:1}),
+            phone('[Developer name]',[['Trust “[Developer name]”','link',true],['Verify App','link']],{t:'Trust this developer?',m:['You can then open apps from this developer'],b:['Cancel','Trust'],hl:1})),
+    hm1:tw(phone('关于手机',[['设备名称','>'],['HarmonyOS 版本',''],['4.2.0','',true],['型号','']]),phone('About phone',[['Device name','>'],['HarmonyOS version',''],['4.2.0','',true],['Model','']])),
+    hm2:tw(phone('纯净模式',[['纯净模式','on',true],['增强防护','on']],{t:'退出纯净模式？',m:['退出后可安装外部来源应用','需验证锁屏密码或华为账号'],b:['取消','退出'],hl:1}),
+           phone('Pure Mode',[['Pure Mode','on',true],['Enhanced protection','on']],{t:'Exit Pure Mode?',m:['You can then install apps from','outside sources. Verification needed.'],b:['Cancel','Exit'],hl:1})),
+    hm3:tw(phone('安装',[['易换.apk',''],['外部来源应用','']],{t:'安全检测',m:['该应用来自外部来源，未经检测','请确认来源可信后继续'],b:['取消','继续安装'],hl:1}),
+           phone('Install',[['Yihuan.apk',''],['App from an outside source','']],{t:'Security check',m:['This app is from an outside source','Continue only if you trust it'],b:['Cancel','Install anyway'],hl:1})),
+    op1:tw(phone('安装外部来源应用',[['浏览器','off',true],['文件管理','off'],['微信','off']]),phone('Install unknown apps',[['Browser','off',true],['Files','off'],['WeChat','off']])),
+    op2:tw(phone('手机管家',[['易换.apk',''],['安全检测','']],{t:'发现风险',m:['该应用未在软件商店上架','确认来源可信后可继续安装'],b:['取消安装','继续安装'],hl:1}),
+           phone('Phone Manager',[['Yihuan.apk',''],['Security scan','']],{t:'Risk found',m:['This app is not from the app store','Continue only if you trust it'],b:['Cancel','Install anyway'],hl:1})),
+    op3:tw(phone('安全检测设置',[['安装应用时检测','on',true],['自动更新病毒库','on']]),phone('Scan settings',[['Scan apps on install','on',true],['Auto-update virus database','on']]))
+  };
+  const pz=(k)=>pic(I[k].zh),pe=(k)=>pic(I[k].en);
+  const VER=p('<span style="color:#9AA3B5">菜单名称会因系统版本略有不同，找不到时在「设置」顶部搜索关键词最快。</span>'),VERe=p('<span style="color:#9AA3B5">Menu names vary by system version. If you cannot find one, search for it at the top of Settings.</span>');
+
+  const T8=B('iPhone 安装易换 App（iOS）','用 Safari 下载安装，再在「VPN 与设备管理」里信任，第一次打开前要联网。',
+    tip('请用 Safari 打开易换官网下载。在 Telegram、微信等 App 里直接点下载，可能没有反应。')+
+    h2('安装步骤')+h3('第 1 步：用 Safari 下载')+p('打开易换官网，点「下载 App」，选择 iPhone。弹出「是否安装“易换”」时，点「安装」，然后回到主屏幕等图标下载完成。')+pz('ios1')+
+    h3('第 2 步：进入「VPN 与设备管理」')+p('第一次打开会提示「未受信任的企业级开发者」，先点「取消」。打开 <b>设置 → 通用 → VPN 与设备管理</b>。')+pz('ios2')+
+    h3('第 3 步：找到易换的开发者')+p('在「企业级 App」下面，点易换对应的开发者名称。')+pz('ios3')+
+    h3('第 4 步：信任')+p('点「信任“开发者名称”」，在弹窗里再点一次「信任」。回到主屏幕就能打开易换了。')+pz('ios4')+
+    h2('常见问题')+h3('提示「无法验证 App，需要联网」')+p('连上 Wi-Fi 或移动数据（关掉飞行模式），回到「VPN 与设备管理」点「验证 App」，再打开易换。')+
+    h3('点了安装没反应，或一直显示「等待中」')+p('检查手机存储空间是否足够。删掉主屏幕上灰色的旧图标，用 Safari 重新下载。')+
+    h3('以前能用，突然打不开')+p('从官网重新下载安装最新版本。如果还不行，带上截图联系 7×24 客服。')+
+    warn('有人让你安装来历不明的「描述文件」来领奖、加速或解锁功能，不要安装。'),
+    'Install Yihuan on iPhone (iOS)','Download with Safari, trust the developer under VPN & Device Management, and stay online the first time you open it.',
+    tip('Use Safari to open the Yihuan website. Tapping download inside Telegram or WeChat may do nothing.')+
+    h2('Steps')+h3('Step 1: Download with Safari')+p('Open the Yihuan website, tap “Get the app” and choose iPhone. When asked to install “Yihuan”, tap “Install” and wait for the icon to finish on your Home Screen.')+pe('ios1')+
+    h3('Step 2: Open VPN & Device Management')+p('The first launch says “Untrusted Enterprise Developer”. Tap “Cancel”, then go to <b>Settings → General → VPN & Device Management</b>.')+pe('ios2')+
+    h3('Step 3: Find the Yihuan developer')+p('Under “Enterprise App”, tap the developer name for Yihuan.')+pe('ios3')+
+    h3('Step 4: Trust')+p('Tap “Trust [developer name]” and confirm with “Trust”. You can now open Yihuan.')+pe('ios4')+
+    h2('Common issues')+h3('“Unable to verify app. Internet connection required”')+p('Connect to Wi-Fi or mobile data (turn off Airplane Mode), tap “Verify App” in VPN & Device Management, then open Yihuan again.')+
+    h3('Nothing happens, or it stays on “Waiting”')+p('Make sure you have enough storage. Delete the grey icon and download again with Safari.')+
+    h3('It used to work but no longer opens')+p('Download and install the latest version from the website. If that does not help, contact 24/7 support with a screenshot.')+
+    warn('Never install an unknown “profile” that promises rewards, faster speed or unlocked features.'));
+
+  const T9=B('华为鸿蒙手机怎么通过安装校验','先确认系统版本，再退出纯净模式，按提示完成安全检测就能安装。',
+    warn('<b>先看系统版本</b><br>打开 设置 → 关于手机，查看 HarmonyOS 版本。如果是 HarmonyOS NEXT / 5.0 及以上（纯血鸿蒙），系统不支持安装安卓安装包，下面的方法不适用。[运营补充：这类手机的替代方案]')+pz('hm1')+
+    h2('安装步骤（HarmonyOS 2～4）')+h3('第 1 步：退出纯净模式')+p('打开 <b>设置 → 系统</b>（部分版本叫「系统和更新」）<b>→ 纯净模式</b>，点「退出」，按提示输入锁屏密码或华为账号密码。')+pz('hm2')+
+    h3('第 2 步：从官网下载安装包')+p('用浏览器打开易换官网，点「下载 App」→「Android」。浏览器提示「此类文件可能损害设备」时，确认是易换官网后点「仍然下载」。')+
+    h3('第 3 步：通过安全检测')+p('打开安装包，系统会提示「外部来源应用，未经检测」。确认安装包来自易换官网，点「继续安装」。部分机型需要先勾选「已了解风险」。')+pz('hm3')+
+    h3('第 4 步：核对版本')+p('打开易换，在「我的 → 关于易换」核对版本号与官网一致。')+
+    h2('常见问题')+ul(['<b>找不到纯净模式</b>：在设置顶部搜索「纯净模式」。','<b>提示「已禁止安装外部来源应用」</b>：在设置里搜索「外部来源」，给正在用的浏览器开启允许。','<b>以后升级 App</b>：如果重新开启了纯净模式，升级前需要再退出一次。'])+VER,
+    'Pass the install check on Huawei HarmonyOS','Check your system version, exit Pure Mode, then pass the security check to install.',
+    warn('<b>Check your version first</b><br>Go to Settings → About phone and check the HarmonyOS version. HarmonyOS NEXT / 5.0 and later cannot install Android packages, so these steps do not apply. [Ops to add: alternative for these phones]')+pe('hm1')+
+    h2('Steps (HarmonyOS 2–4)')+h3('Step 1: Exit Pure Mode')+p('Go to <b>Settings → System</b> (“System & updates” on some versions) <b>→ Pure Mode</b>, tap “Exit” and confirm with your lock screen or Huawei ID password.')+pe('hm2')+
+    h3('Step 2: Download from the website')+p('Open the Yihuan website in your browser, tap “Get the app” → “Android”. If the browser warns that the file may harm your device, make sure you are on the Yihuan website and tap “Download anyway”.')+
+    h3('Step 3: Pass the security check')+p('Open the package. The system says the app is from an outside source and has not been checked. If it came from the Yihuan website, tap “Install anyway”. Some models ask you to tick “I understand the risk” first.')+pe('hm3')+
+    h3('Step 4: Check the version')+p('Open Yihuan and check the version under “Me → About Yihuan”.')+
+    h2('Common issues')+ul(['<b>Cannot find Pure Mode</b>: search “Pure Mode” at the top of Settings.','<b>“Installing apps from outside sources is blocked”</b>: search “unknown apps” in Settings and allow the browser you use.','<b>Updating later</b>: if you turned Pure Mode back on, exit it again before updating.'])+VERe);
+
+  const T10=B('OPPO 手机安装时手机管家报错怎么办','OPPO（ColorOS）会扫描官网下载的安装包，出现禁止安装、风险提示或卡在检测时，按下面处理。',
+    tip('易换没有在 OPPO 软件商店上架，从官网下载的安装包会被当作「外部来源应用」扫描，出现提示属于正常情况。<b>前提是安装包一定来自易换官网。</b>')+
+    h2('报错 1：禁止安装外部来源应用')+p('打开 <b>设置 → 密码与安全 → 系统安全 → 安装外部来源应用</b>，找到你下载用的浏览器，打开开关。')+pz('op1')+
+    h2('报错 2：手机管家提示「发现风险」或「病毒」')+p('在提示页点「继续安装」（部分版本叫「无视风险安装」），按要求输入 OPPO 账号密码或锁屏密码即可。')+pz('op2')+
+    h2('报错 3：一直卡在「正在检测」')+p('打开 <b>手机管家 → 右上角设置 → 安全检测</b>，暂时关闭「安装应用时检测」，装好后再打开。')+pz('op3')+
+    h2('装好之后')+ul(['打开易换，在「我的 → 关于易换」核对版本号与官网一致。','手机管家之后如果提示「建议卸载」，确认版本号与官网一致后可以忽略。'])+
+    warn('只有从易换官网下载的安装包可以这样处理。其他来源的安装包提示风险时，请直接删除。')+VER,
+    'OPPO: fixing Phone Manager errors when installing','OPPO (ColorOS) scans packages downloaded from the web. Here is what to do if it blocks the install, flags a risk or gets stuck scanning.',
+    tip('Yihuan is not in the OPPO App Market, so the package from our website is scanned as an app from an outside source. A warning is normal. <b>Only continue if the package came from the Yihuan website.</b>')+
+    h2('Error 1: Installing unknown apps is blocked')+p('Go to <b>Settings → Password & security → System security → Install unknown apps</b> and allow the browser you downloaded with.')+pe('op1')+
+    h2('Error 2: Phone Manager reports a risk or virus')+p('Tap “Install anyway” on the warning and confirm with your OPPO account or lock screen password.')+pe('op2')+
+    h2('Error 3: Stuck on “Scanning”')+p('Open <b>Phone Manager → Settings (top right) → Security scan</b> and turn off “Scan apps on install” for now. Turn it back on afterwards.')+pe('op3')+
+    h2('After installing')+ul(['Open Yihuan and check the version under “Me → About Yihuan”.','If Phone Manager later suggests uninstalling, you can ignore it once the version matches the website.'])+
+    warn('Only do this for packages from the Yihuan website. Delete any package from another source that gets flagged.')+VERe);
   const cvr=(o,c)=>(o.cover=c,o);
   S.contents=[
-    mk({id:'TU20261001',type:'tutorial',cat:'c1',status:'published',views:8421,created:d(2026,10,1),updated:d(2026,10,20,14,12),publishedAt:d(2026,10,2,9),data:cvr(T1,cv1),related:['TU20261002','TU20261003','RK20261002']}),
+    mk({id:'TU20261001',type:'tutorial',cat:'c1',status:'published',views:8421,created:d(2026,10,1),updated:d(2026,10,20,14,12),publishedAt:d(2026,10,2,9),data:cvr(T1,cv1),related:['TU20261008','TU20261009','TU20261010','TU20261002','RK20261002']}),
     mk({id:'TU20261002',type:'tutorial',cat:'c2',status:'published',views:5130,created:d(2026,10,3),updated:d(2026,10,5,11),publishedAt:d(2026,10,5,11),data:cvr(T2,cv2),related:['RK20261001']}),
     mk({id:'TU20261003',type:'tutorial',cat:'c2',status:'published',views:3204,created:d(2026,10,4),updated:d(2026,10,27,17,40),publishedAt:d(2026,10,6,10),data:cvr(T3,cv3)}),
     mk({id:'TU20261004',type:'tutorial',cat:'c3',status:'published',views:2675,created:d(2026,10,7),updated:d(2026,10,8),publishedAt:d(2026,10,8),data:cvr(T4,cv4)}),
@@ -905,13 +1014,16 @@ function seed(){
     mk({id:'FQ20261001',type:'faq',cat:'c5',status:'published',views:6210,created:d(2026,10,2),updated:d(2026,10,14),publishedAt:d(2026,10,14),data:cvr(F1,cv8),related:['TU20261005']}),
     mk({id:'FQ20261002',type:'faq',cat:'c6',status:'published',views:2988,created:d(2026,10,9),updated:d(2026,10,10),publishedAt:d(2026,10,10),data:cvr(F2,cv6),related:['TU20261003']}),
     mk({id:'FQ20261003',type:'faq',cat:'c7',status:'draft',created:d(2026,10,28,8,30),updated:d(2026,10,28,8,30),data:F3}),
-    mk({id:'RK20261001',type:'risk',cat:'c9',status:'published',views:9310,riskLevel:'高',created:d(2026,10,1),updated:d(2026,10,14),publishedAt:d(2026,10,14),data:cvr(R1,cv9),related:['TU20261002','RK20261002']}),
-    mk({id:'RK20261002',type:'risk',cat:'c10',status:'published',views:4102,riskLevel:'中',created:d(2026,10,3),updated:d(2026,10,4),publishedAt:d(2026,10,4),data:cvr(R2,cv10),related:['TU20261001']}),
-    mk({id:'RK20261003',type:'risk',cat:'c12',status:'offline',views:1877,riskLevel:'高',created:d(2026,9,12),updated:d(2026,10,18),publishedAt:d(2026,9,13),data:cvr(R3,cv9)}),
+    mk({id:'RK20261001',type:'risk',cat:'c12',status:'published',views:9310,created:d(2026,10,1),updated:d(2026,10,14),publishedAt:d(2026,10,14),data:cvr(R1,cv9),related:['TU20261002','RK20261002']}),
+    mk({id:'RK20261002',type:'risk',cat:'c10',status:'published',views:4102,created:d(2026,10,3),updated:d(2026,10,4),publishedAt:d(2026,10,4),data:cvr(R2,cv10),related:['TU20261001']}),
+    mk({id:'RK20261003',type:'risk',cat:'c12',status:'offline',views:1877,created:d(2026,9,12),updated:d(2026,10,18),publishedAt:d(2026,9,13),data:cvr(R3,cv9)}),
     mk({id:'NW20261001',type:'news',cat:'c13',status:'published',views:12840,created:d(2026,10,10),updated:d(2026,10,10),publishedAt:d(2026,10,10),data:cvr(N1,cv11),related:['TU20261003']}),
     mk({id:'NW20261002',type:'news',cat:'c13',status:'published',views:9655,created:d(2026,10,12),updated:d(2026,10,12),publishedAt:d(2026,10,12),data:cvr(N2,cv11)}),
     mk({id:'NW20261003',type:'news',cat:'c14',status:'scheduled',created:d(2026,10,26),updated:d(2026,10,27,18),scheduleAt:d(2026,10,30,9),data:cvr(N3,cv12)}),
     mk({id:'NW20261004',type:'news',cat:'c13',status:'published',views:7023,created:d(2026,10,15),updated:d(2026,10,15),publishedAt:d(2026,10,15),data:cvr(N4,cv11)})
+    ,mk({id:'TU20261008',type:'tutorial',cat:'c1',status:'published',views:3560,created:d(2026,10,28,15),updated:d(2026,10,29,10),publishedAt:d(2026,10,29,10),data:cvr(T8,cover('iPhone 安装','#E3EBFF','#2F55E0')),related:['TU20261001','TU20261002']}),
+    mk({id:'TU20261009',type:'tutorial',cat:'c1',status:'published',views:2140,created:d(2026,10,28,16),updated:d(2026,10,29,10,30),publishedAt:d(2026,10,29,10,30),data:cvr(T9,cover('鸿蒙安装校验','#E8E3FF','#5B3CC4')),related:['TU20261001','TU20261010']}),
+    mk({id:'TU20261010',type:'tutorial',cat:'c1',status:'published',views:1985,created:d(2026,10,28,17),updated:d(2026,10,29,11),publishedAt:d(2026,10,29,11),data:cvr(T10,cover('OPPO 安装报错','#E3F5EC','#17845A')),related:['TU20261001','TU20261009','RK20261002']})
   ];
   // TU20261003 的修改稿
 
@@ -931,7 +1043,8 @@ function seed(){
     {id:'s4',name:'新手学院 · 合作方教程',types:['tutorial'],cap:3,items:['TU20261004']},
     {id:'s5',name:'新手学院 · 基础功能',types:['tutorial'],cap:3,items:['TU20261005']},
     {id:'s6',name:'新手学院 · 防骗防盗号',types:['risk'],cap:6,items:['RK20261001','RK20261002','RK20261003']},
-    {id:'s7',name:'新手学院 · 常见问题',types:['faq'],cap:3,items:['FQ20261001','FQ20261002']}
+    {id:'s7',name:'新手学院 · 常见问题',types:['faq'],cap:3,items:['FQ20261001','FQ20261002']},
+    {id:'s8',name:'新手学院 · 行业热点',types:['news'],cap:3,items:['NW20261001','NW20261002','NW20261004']}
   ];
 
   const lic=cert('营业执照'),lic2=cert('支付业务许可');
@@ -960,7 +1073,6 @@ function logIt(c,act){c.log.unshift({at:now(),who:me().name,act});c.updated=now(
 function nextId(type){const p=TYPES[type].pre;S.seq[p]++;return p+'202610'+pad(S.seq[p])}
 
 /* ---------- 正文富文本 ---------- */
-const PH='（请填写';  // 模板占位符前缀，发布前必须替换
 const toHtml=t=>(t||'').split('\n').filter(s=>s.trim()).map(s=>'<p>'+esc(s)+'</p>').join('');
 const rtText=h=>{const d=document.createElement('div');d.innerHTML=h||'';return (d.textContent||'').replace(/\s+/g,' ').trim()};
 const rtImgs=h=>((h||'').match(/<img\b/gi)||[]).length;
@@ -984,14 +1096,6 @@ function sanitize(html){
     walk(c);
   })})(root);
   return root.innerHTML;
-}
-/* 新建时按类型带出的正文模板（占位文字需替换后才能发布） */
-function preset(type,l){
-  const z=l!=='en';const ph=(a,b)=>`<p style="color:#9AA3B5">${z?PH+a+'）':'(Fill in: '+b+')'}</p>`;
-  if(type==='tutorial')return `<h2>${z?'操作前准备':'Before you start'}</h2>${ph('需要提前准备的东西','what to prepare')}<h2>${z?'操作步骤':'Steps'}</h2><h3>${z?'第 1 步：':'Step 1: '}</h3>${ph('这一步做什么，配一张截图','what to do, with a screenshot')}<h2>${z?'常见错误':'Common mistakes'}</h2>${ph('新手容易出错的地方','common mistakes')}`;
-  if(type==='faq')return `<div class="tip"><b>${z?'先看结论':'Quick answer'}</b><br>${z?PH+'一两句话直接回答）':'(Fill in: one or two lines)'}</div><h2>${z?'可能原因':'Possible causes'}</h2>${ph('列出常见原因','common causes')}<h2>${z?'自查步骤':'Self-check'}</h2>${ph('用户可以自己检查的步骤','steps users can check')}<h2>${z?'仍未解决':'Still stuck?'}</h2>${ph('联系客服时需要提供的信息','what to send support')}`;
-  if(type==='risk')return `<div class="warn"><b>${z?'一句话警示':'In one line'}</b><br>${z?PH+'最重要的一句提醒）':'(Fill in: the key warning)'}</div><h2>${z?'骗子常用话术':'What scammers say'}</h2>${ph('真实出现过的话术','real lines used')}<h2>${z?'正确做法':'What to do'}</h2>${ph('遇到时应该怎么做','what to do')}<h2>${z?'已经上当怎么办':'If it already happened'}</h2>${ph('补救步骤','recovery steps')}`;
-  return `${ph('导入段落','opening paragraph')}<h2>${z?'小标题':'Heading'}</h2>${ph('正文','body')}`;
 }
 function rteBar(mid){
   const b=(cmd,label,title)=>`<button type="button" class="tb" data-act="rt" data-m="${mid}" data-cmd="${cmd}" title="${title}" aria-label="${title}">${label}</button>`;
@@ -1204,7 +1308,7 @@ function metaOf(c){return {type:c.type,cat:c.cat,riskLevel:c.riskLevel,related:c
 
 /* ---------- 内容编辑 ---------- */
 let E=null;
-function emptyW(type){return {cover:null,zh:{title:'',lead:'',html:preset(type,'zh')},en:{title:'',lead:'',html:preset(type,'en')},cat:'',riskLevel:'',related:[]}}
+function emptyW(type){return {cover:null,zh:{title:'',lead:'',html:''},en:{title:'',lead:'',html:''},cat:'',riskLevel:'',related:[]}}
 function pageNew(type){if(!TYPES[type])return location.hash='#/contents';E={id:null,type,W:emptyW(type),lang:'zh',errs:[],dirty:false};renderEd()}
 function pageEdit(id){
   const c=byId(id);if(!c){location.hash='#/contents';return}
@@ -1222,10 +1326,8 @@ function validate(){
   ['zh','en'].forEach(l=>{if(!W[l].title.trim())er.push({k:l+'.title',l,msg:LANGN[l]+'标题'});if(!W[l].lead.trim())er.push({k:l+'.lead',l,msg:LANGN[l]+'导语'})});
   if(!W.cover)er.push({k:'cover',msg:'封面图'});
   if(!W.cat)er.push({k:'cat',msg:'分类'});
-  if(E.type==='risk'&&!W.riskLevel)er.push({k:'risk',msg:'风险等级'});
   ['zh','en'].forEach(l=>{const h=W[l].html||'',t=rtText(h);
     if(!t&&!rtImgs(h))er.push({k:'body.'+l,l,msg:LANGN[l]+'正文'});
-    else if(t.includes(PH)||t.includes('(Fill in:'))er.push({k:'body.'+l,l,msg:LANGN[l]+'正文还有模板占位文字'});
     else if(l==='en'&&/[\u4e00-\u9fff]/.test(t))er.push({k:'body.en',l,msg:'英文正文里还有中文'});});
   return er;
 }
@@ -1277,7 +1379,7 @@ function renderEd(){
       </div></div>
       <div class="card" data-k="body.${l}"><div class="card-hd"><h3>正文 · ${l==='zh'?'中文':'English'}</h3><span class="hint" id="rtc-${l}">${rtStat(W[l].html)}</span></div>
         <div class="card-bd">
-          ${!ro&&l==='en'&&(!rtText(W.en.html)||rtText(W.en.html).includes('(Fill in:'))&&(rtText(W.zh.html)||rtImgs(W.zh.html))?`<div class="en-copy" style="margin-bottom:10px"><span>英文正文还没写。可以先把中文正文（含图片）复制过来，再逐段改成英文。</span><button class="btn sm" data-act="en-copy">复制中文正文</button></div>`:''}
+          ${!ro&&l==='en'&&!rtText(W.en.html)&&!rtImgs(W.en.html)&&(rtText(W.zh.html)||rtImgs(W.zh.html))?`<div class="en-copy" style="margin-bottom:10px"><span>英文正文还没写。可以先把中文正文（含图片）复制过来，再逐段改成英文。</span><button class="btn sm" data-act="en-copy">复制中文正文</button></div>`:''}
           ${ro?'':rteBar(l)}<div class="rte ${ro?'ro':''} ${hasErr('body.'+l)?'err':''}" data-m="${l}" contenteditable="${ro?'false':'true'}" role="textbox" aria-multiline="true" aria-label="正文">${sanitize(W[l].html)}</div>
           ${ro?'':`<div class="rtc">图片支持 JPG / PNG / WebP，≤ 10MB；长图在前台完整显示，点击可看大图。粘贴内容会自动清理格式外的代码。</div>`}
         </div></div>
@@ -1286,7 +1388,6 @@ function renderEd(){
       <div class="card"><div class="card-hd"><h3>基本设置</h3></div><div class="card-bd" style="display:flex;flex-direction:column;gap:14px">
         <div class="fld"><span class="lab">类型</span><div><span class="tag type">${TYPES[E.type].zh}</span></div></div>
         <div class="fld" data-k="cat"><label class="req" for="cat">分类</label><select class="sel ${hasErr('cat')?'err':''}" id="cat" data-act-ch="cat" ${ro?'disabled':''}><option value="">请选择</option>${cats.map(x=>`<option value="${x.id}" ${W.cat===x.id?'selected':''}>${esc(x.zh)} / ${esc(x.en)}</option>`).join('')}</select></div>
-        ${E.type==='risk'?`<div class="fld" data-k="risk"><span class="lab req">风险等级</span><div class="seg" style="width:max-content;${hasErr('risk')?'box-shadow:0 0 0 2px var(--bad)':''}">${RISK.map(x=>`<button class="${W.riskLevel===x?'on':''}" data-act="risk" data-v="${x}" ${ro?'disabled':''}>${x}</button>`).join('')}</div></div>`:''}
         <div class="fld" data-k="cover"><span class="lab req">封面图</span>${imgUI(W.cover,'cover',ro,true)}</div>
       </div></div>
       <div class="card"><div class="card-hd"><h3>展示位</h3></div><div class="card-bd"><div class="slotchk">${sl.map(s=>{const inS=c&&s.items.includes(c.id),full=s.items.length>=s.cap;return `<label><input type="checkbox" data-slot="${s.id}" ${inS?'checked':''} ${!c||(!inS&&full)||!(can('edit')||can('publish'))?'disabled':''}>${esc(s.name)}<em class="${full?'cap full':''}">${s.items.length}/${s.cap}</em></label>`}).join('')}</div></div></div>
@@ -1332,7 +1433,6 @@ function bindEd(){
       case 'en-copy':{const go=()=>{W.en.html=W.zh.html;E.dirty=true;E.errs=E.errs.filter(x=>x.k!=='body.en');renderEd();toast('已复制中文正文，请逐段改成英文')};go();break}
       case 'img-del':{const [o,k]=getHolder(t.dataset.p);o[k]=null;dirty();break}
       case 'lb':{const [o,k]=getHolder(t.dataset.p);openLB(o[k]);break}
-      case 'risk':W.riskLevel=t.dataset.v;E.errs=E.errs.filter(x=>x.k!=='risk');dirty();break;
       case 'rel-del':W.related=W.related.filter(x=>x!==t.dataset.id);dirty();break;
       case 'rel-add':W.related.push(t.dataset.id);dirty();break;
       case 'preview':openPreview(c,W,{type:E.type,cat:W.cat,riskLevel:W.riskLevel,related:W.related,updated:c?c.updated:now()});break;
@@ -1408,7 +1508,7 @@ function renderPV(){
     <div class="pv-body"><div class="pv-frame ${PV.dev==='h5'?'h5':''}"><article class="art ${m.type}">
       <div class="hd">${d.cover?`<img src="${d.cover.src}" alt="" data-pi="${coverI}" style="cursor:zoom-in">`:'<div style="aspect-ratio:16/9;border-radius:12px;background:#D8E1F7"></div>'}
       <div>${cat?`<span class="badge">${esc(cat)}</span>`:''}<h1>${d[l].title?esc(d[l].title):'<span style="color:#9AA3B5">'+(l==='zh'?'未填写标题':'No title')+'</span>'}</h1>${d[l].lead?`<p class="lead">${esc(d[l].lead)}</p>`:''}
-      <div class="meta">${m.type==='risk'&&m.riskLevel?`<span>${l==='zh'?'风险等级':'Risk'}：${l==='zh'?m.riskLevel:{高:'High',中:'Medium',低:'Low'}[m.riskLevel]}</span>`:''}<span>${fmtD(m.updated)}</span></div></div></div>
+      <div class="meta"><span>${fmtD(m.updated)}</span></div></div></div>
       <div class="body"><div class="content">${mods||''}</div>${rel.length?`<aside class="rel"><h3>${relT}</h3>${rel.map(r=>`<div>${esc(r.data[l].title||r.data.zh.title)}</div>`).join('')}</aside>`:''}</div>
     </article></div></div></div>`;
   el.onclick=e=>{if(e.target.tagName==='IMG'&&e.target.closest('.rt'))return openLB({src:e.target.src,w:e.target.naturalWidth,h:e.target.naturalHeight,name:''});const t=e.target.closest('[data-pv],[data-pi]');if(!t)return;
@@ -1444,11 +1544,11 @@ const catL=(type,id)=>{const c=(S.cats[type]||[]).find(x=>x.id===id);return c?c[
 const slotLive=id=>(S.slots.find(s=>s.id===id)||{items:[]}).items.map(byId).filter(live);
 const TYPEL={tutorial:['新手教程','Guides'],faq:['常见问题','FAQ'],risk:['防骗防盗号','Stay safe'],news:['行业热点','Industry news']};
 const wimg=img=>{WIMGS.push(img);return WIMGS.length-1};
-const riskEn={高:'High',中:'Medium',低:'Low'};
+const catRed=(type,id)=>!!((S.cats[type]||[]).find(x=>x.id===id)||{}).red;
 
 /* 组件 */
 function wCard(c){return `<button class="w-card" data-w-go="detail/${c.id}">${c.data.cover?`<img src="${c.data.cover.src}" alt="">`:'<img alt="">'}<span class="in"><span class="w-tag">${esc(catL(c.type,c.cat))}</span><b>${esc(tx(c,'title'))}</b><small>${esc(tx(c,'lead'))}</small></span></button>`}
-function wRisk(c){const hi=c.riskLevel==='高';return `<button class="w-scard ${hi?'r':''}" data-w-go="detail/${c.id}"><span class="w-tag ${hi?'r':''}">${hi?tr('高风险问题','High risk'):esc(catL(c.type,c.cat))}</span><b>${esc(tx(c,'title'))}</b><small>${esc(tx(c,'lead'))}</small></button>`}
+function wRisk(c){const hi=catRed(c.type,c.cat);return `<button class="w-scard ${hi?'r':''}" data-w-go="detail/${c.id}"><span class="w-tag ${hi?'r':''}">${esc(catL(c.type,c.cat))}</span><b>${esc(tx(c,'title'))}</b><small>${esc(tx(c,'lead'))}</small></button>`}
 function wFaq(c){return `<button data-w-go="detail/${c.id}"><span class="w-tag">${esc(catL(c.type,c.cat))}</span><b>${esc(tx(c,'title'))}</b><small class="mono">${fmtD(c.updated)}</small><i>${tr('查看处理步骤','View steps')} ›</i></button>`}
 function wNewsRow(c){return `<button class="w-newsrow" data-w-go="detail/${c.id}">${c.data.cover?`<img src="${c.data.cover.src}" alt="">`:'<span></span>'}<span><span class="w-tag">${esc(catL(c.type,c.cat))}</span><b style="margin-top:8px">${esc(tx(c,'title'))}</b><p>${esc(tx(c,'lead'))}</p><span class="mt"><span>${fmtD(c.publishedAt)}</span><span>${tr('阅读','Views')} ${c.views.toLocaleString()}</span></span></span></button>`}
 function wQR(){return `<div class="w-qr"><img src="${qrImg()}" alt="${tr('下载二维码','Download QR code')}"><button class="w-btn blue sm" data-w-dl>${tr('扫码下载','Scan to download')}</button></div>`}
@@ -1461,15 +1561,17 @@ function wHeader(act){return `<header class="w-hd"><div class="w-wrap">
   <nav class="w-nav">${SNAV.map(([k,z,e])=>`<button class="${act===k?'on':''}" data-w-go="${k}">${tr(z,e)}</button>`).join('')}</nav>
   <div class="w-tools"><button class="w-tool" data-w-dl>${svg('M7 3h10v18H7zM11 18h2',18)}<span class="lbl">${tr('下载APP','Get the app')}</span></button>
   <button class="w-tool" data-w-kf>${svg('M4 14v-2a8 8 0 0 1 16 0v2M3 14h4v6H3zM17 14h4v6h-4z',18)}<span class="lbl">${tr('7×24客服','24/7 support')}</span></button>
-  <label class="w-tool">${svg('M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18',18)}<select id="wlang" aria-label="语言 Language"><option value="zh" ${SL==='zh'?'selected':''}>中文</option><option value="en" ${SL==='en'?'selected':''}>English</option></select></label></div>
-</div></header>`}
+  <label class="w-tool">${svg('M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18',18)}<select id="wlang" aria-label="语言 Language"><option value="zh" ${SL==='zh'?'selected':''}>中文</option><option value="en" ${SL==='en'?'selected':''}>English</option></select></label>
+  <button class="w-tool w-burger" data-w-menu aria-label="${tr('菜单','Menu')}">${svg('M4 7h16M4 12h16M4 17h16',22)}</button></div>
+</div></header>
+<div class="w-drawer" hidden><div class="w-drawer-bg" data-w-menu></div><nav class="w-drawer-panel" aria-label="${tr('菜单','Menu')}">${SNAV.map(([k,z,e])=>`<button class="${act===k?'on':''}" data-w-go="${k}">${tr(z,e)}</button>`).join('')}<button class="w-btn blue" data-w-dl style="margin-top:16px">${tr('下载 App','Get the app')}</button></nav></div>`}
 function wFooter(){
   const L=(z,e,go,extra)=>`<button ${go?`data-w-go="${go}"`:'data-w-soon'} ${extra||''}>${tr(z,e)}</button>`;
   return `<footer class="w-ft"><div class="w-wrap"><div class="cols">
   <div><h4>${tr('核心业务','Products')}</h4>${L('实时汇率','Live rates','rates')}${L('在线换汇','Online exchange','home','data-w-to="w-calc"')}${L('汇率计算器','Rate calculator','home','data-w-to="w-calc"')}${L('国际汇款','International transfer','service')}${L('多币种兑换','Multi-currency exchange','service')}${L('移动端换汇','Mobile exchange','',`data-w-dl`).replace('data-w-soon','')}</div>
   <div><h4>${tr('汇款服务','Transfers')}</h4>${L('新手汇款指南','Beginner guide','academy')}${L('实时汇款追踪','Transfer tracking')}${L('汇款限额说明','Transfer limits')}${L('汇款常见问题','Transfer FAQ','list/faq')}${L('虚拟币提现','Crypto withdrawal')}</div>
   <div><h4>${tr('服务地区','Locations')}</h4>${[['河内换汇','Hanoi'],['胡志明市换汇','Ho Chi Minh City'],['仰光换汇','Yangon'],['金边换汇','Phnom Penh'],['马尼拉换汇','Manila'],['吉隆坡换汇','Kuala Lumpur'],['新加坡换汇','Singapore'],['香港换汇','Hong Kong'],['东京换汇','Tokyo']].map(([z,e])=>L(z,e,'service','data-w-to="w-reg"')).join('')}</div>
-  <div><h4>${tr('帮助与企业信息','Help & company')}</h4>${L('关于我们','About us','about')}${L('联系我们','Contact us','about','data-w-to="w-contact"')}${L('新手学院','Academy','academy')}${L('商家合作','Partner with us','apply')}${L('提交投诉','Complaints')}${L('使用条款','Terms of use')}${L('隐私政策','Privacy policy')}${L('常见问题','FAQ','list/faq')}</div></div>
+  <div><h4>${tr('帮助与企业信息','Help & company')}</h4>${L('关于我们','About us','about')}${L('联系我们','Contact us','about','data-w-to="w-contact"')}${L('新手学院','Academy','academy')}${L('商家合作','Partner with us','apply')}${L('提交投诉','Complaints')}${L('使用条款','Terms of use','page/terms')}${L('隐私政策','Privacy policy','page/privacy')}${L('常见问题','FAQ','list/faq')}</div></div>
   <p class="about">${tr('平台提供多地区在线换汇、实时汇率查询与国际汇款服务，支持多币种兑换与汇率计算工具，帮助用户在常见出境场景下快速完成换汇与资金流转。','Online exchange, live rates and international transfers across regions, with multi-currency exchange and rate tools for everyday travel and business.')}</p>
   <div class="ch"><button data-w-proto>${tr('中文官方频道','Chinese channel')}</button><button data-w-proto>${tr('越南官方频道','Vietnamese channel')}</button><button data-w-proto>${tr('中文直播频道','Chinese live channel')}</button></div>
   <div class="cp"><span>© 2026 ${tr('易换 版权所有','Yihuan. All rights reserved.')}</span><span>ICP —</span></div></div></footer>`;
@@ -1559,7 +1661,7 @@ function wService(){
 
 /* ---------- 新手学院 ---------- */
 function wAcademy(){
-  const main=slotLive('s2')[0],start=slotLive('s3'),part=slotLive('s4'),basic=slotLive('s5'),faq=slotLive('s7'),risk=slotLive('s6');
+  const main=slotLive('s2')[0],start=slotLive('s3'),part=slotLive('s4'),basic=slotLive('s5'),faq=slotLive('s7'),risk=slotLive('s6'),hot=slotLive('s8');
   const sec=(title,more,body,tint)=>`<section class="w-sec ${tint?'tint':''}" style="padding:56px 0"><div class="w-wrap"><div class="w-shd"><h2 class="w-h2" style="font-size:28px">${title}</h2>${more?`<button class="w-more" data-w-go="${more}">${tr('查看更多','View more')} ›</button>`:''}</div>${body}</div></section>`;
   return `<section class="w-phero" style="padding:48px 0 40px"><div class="w-wrap"><h1 class="w-h2" style="font-size:40px">${tr('第一次用易换？从这里开始','New to Yihuan? Start here')}</h1><p class="w-sub" style="font-size:16px">${tr('安装、安全设置、第一次换汇，按顺序看完就能上手。','Install, secure your account, make your first exchange. Read in order and you are ready.')}</p></div></section>
   ${main?`<section class="w-sec" style="padding:24px 0 56px"><div class="w-wrap"><button class="w-feature" data-w-go="detail/${main.id}">${main.data.cover?`<img src="${main.data.cover.src}" alt="">`:''}<span><span class="w-tag">${esc(catL(main.type,main.cat))}</span><h3>${esc(tx(main,'title'))}</h3><p>${esc(tx(main,'lead'))}</p><span class="w-btn blue sm" style="margin-top:20px">${tr('看完整步骤','See all steps')}</span></span></button></div></section>`:''}
@@ -1568,7 +1670,8 @@ function wAcademy(){
   ${part.length?sec(tr('合作方教程','Partner guides'),'list/tutorial/c3',`<div class="w-g3">${part.map(wCard).join('')}</div>`,true):''}
   ${basic.length?sec(tr('易换基础功能','Yihuan basics'),'list/tutorial/c4',`<div class="w-g3">${basic.map(wCard).join('')}</div>`):''}
   ${faq.length?sec(tr('常见问题','FAQ'),'list/faq',`<div class="w-faq">${faq.map(wFaq).join('')}</div>`,true):''}
-  ${risk.length?sec(tr('防骗防盗号','Stay safe'),'list/risk',`<div class="w-g3">${risk.map(wRisk).join('')}</div>`):''}`;
+  ${risk.length?sec(tr('防骗防盗号','Stay safe'),'list/risk',`<div class="w-g3">${risk.map(wRisk).join('')}</div>`):''}
+  ${hot.length?sec(tr('行业热点','Industry news'),'list/news',`<div class="w-g3">${hot.map(wCard).join('')}</div>`,true):''}`;
 }
 
 /* ---------- 列表页 ---------- */
@@ -1582,7 +1685,7 @@ function wList(type,cat){
   const cats=S.cats[type].filter(c=>c.on&&all.some(x=>x.cat===c.id));
   const body=!view.length?`<div class="w-empty">${tr('暂无相关内容','Nothing here yet')}</div>`:type==='tutorial'?`<div class="w-g3">${view.map(wCard).join('')}</div>`:type==='risk'?`<div class="w-g3">${view.map(wRisk).join('')}</div>`:type==='faq'?`<div class="w-faq">${view.map(wFaq).join('')}</div>`:`<div>${view.map(wNewsRow).join('')}</div>`;
   return `<section class="w-phero" style="padding:40px 0 56px"><div class="w-wrap">
-    <div class="w-crumb"><button data-w-go="home">${tr('首页','Home')}</button>/${type==='news'?'':`<button data-w-go="academy">${tr('新手学院','Academy')}</button>/`}<span>${tr(...TYPEL[type])}</span></div>
+    <div class="w-crumb"><button data-w-go="home">${tr('首页','Home')}</button>/<button data-w-go="academy">${tr('新手学院','Academy')}</button>/<span>${tr(...TYPEL[type])}</span></div>
     <h1 class="w-h2" style="font-size:36px">${tr(...TYPEL[type])}</h1>
     <div class="w-ltabs"><button class="${!cat?'on':''}" data-w-go="list/${type}">${tr('全部','All')}</button>${cats.map(c=>`<button class="${cat===c.id?'on':''}" data-w-go="list/${type}/${c.id}">${esc(c[SL]||c.zh)}</button>`).join('')}</div>
     <div class="w-search"><input id="wq" value="${esc(WL.q)}" placeholder="${tr('搜索标题','Search titles')}" aria-label="${tr('搜索标题','Search titles')}"><span>${tr('共','')} ${rows.length} ${tr('篇','results')}</span></div>
@@ -1599,18 +1702,28 @@ function wDetail(id){
   const rel=(c.related||[]).map(byId).filter(live);
   const relT={tutorial:['相关教程','Related guides'],faq:['相关教程','Related guides'],risk:['相关安全教程','Related safety guides'],news:['相关阅读','Related reading']}[c.type];
   const news=c.type==='news'?pubOf('news').sort((a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt)):[];const ni=news.indexOf(c);
-  const hi=c.type==='risk';
+  const hi=catRed(c.type,c.cat);
   return `<section class="w-dhero"><div class="w-wrap">
-    <div class="w-crumb"><button data-w-go="home">${tr('首页','Home')}</button>/${c.type==='news'?`<button data-w-go="list/news">${tr('行业热点','Industry news')}</button>`:`<button data-w-go="academy">${tr('新手学院','Academy')}</button>/<button data-w-go="list/${c.type}/${c.cat}">${esc(catL(c.type,c.cat))}</button>`}/<span>${esc(tx(c,'title'))}</span></div>
+    <div class="w-crumb"><button data-w-go="home">${tr('首页','Home')}</button>/<button data-w-go="academy">${tr('新手学院','Academy')}</button>/${c.type==='news'?`<button data-w-go="list/news">${tr('行业热点','Industry news')}</button>`:`<button data-w-go="list/${c.type}/${c.cat}">${esc(catL(c.type,c.cat))}</button>`}/<span>${esc(tx(c,'title'))}</span></div>
     <div class="g">${d.cover?`<img src="${d.cover.src}" alt="" data-w-img="${wimg(d.cover)}">`:'<span></span>'}<div>
-      <span class="w-tag ${hi?'r':''}">${hi?tr('风险警示','Risk alert'):esc(catL(c.type,c.cat))}</span><h1>${esc(tx(c,'title'))}</h1><p>${esc(tx(c,'lead'))}</p>
-      <div class="mt"><span>${tr(...TYPEL[c.type])}</span>${hi&&c.riskLevel?`<span>${tr('风险等级','Risk level')}：${tr(c.riskLevel,riskEn[c.riskLevel])}</span>`:''}<span>${tr('更新于','Updated')} ${fmtD(c.updated)}</span><span>${tr('阅读','Views')} ${c.views.toLocaleString()}</span></div></div></div></div></section>
+      <span class="w-tag ${hi?'r':''}">${esc(catL(c.type,c.cat))}</span><h1>${esc(tx(c,'title'))}</h1><p>${esc(tx(c,'lead'))}</p>
+      <div class="mt"><span>${tr(...TYPEL[c.type])}</span><span>${tr('更新于','Updated')} ${fmtD(c.updated)}</span><span>${tr('阅读','Views')} ${c.views.toLocaleString()}</span></div></div></div></div></section>
   <div class="w-wrap"><div class="w-dbody"><article class="w-art">${body}
     ${c.type==='news'?`<div class="w-pn"><button ${ni>0?`data-w-go="detail/${news[ni-1].id}"`:'disabled'}><small>${tr('上一篇','Previous')}</small>${ni>0?esc(tx(news[ni-1],'title')):tr('没有了','None')}</button><button ${ni<news.length-1?`data-w-go="detail/${news[ni+1].id}"`:'disabled'}><small>${tr('下一篇','Next')}</small>${ni<news.length-1?esc(tx(news[ni+1],'title')):tr('没有了','None')}</button></div><div><button class="w-btn line sm" data-w-go="list/news">${tr('返回列表','Back to list')}</button></div>`:''}</article>
     <aside class="w-side">${rel.length?`<div class="bk"><h3>${tr(...relT)}</h3>${rel.map(r=>`<button data-w-go="detail/${r.id}"><span>${esc(tx(r,'title'))}</span><span>›</span></button>`).join('')}</div>`:''}
       <div class="bk"><h3>${tr('还有疑问？','Still need help?')}</h3><p style="margin:0 0 12px;color:var(--w-ink3);font-size:14px">${tr('7×24 在线客服随时为您解答','Our 24/7 support team is here')}</p><button class="w-btn blue sm" style="width:100%;justify-content:center" data-w-kf>${tr('联系客服','Contact support')}</button></div></aside></div></div>`;
 }
 function wNotFound(){return `<section class="w-sec"><div class="w-wrap w-empty"><h2 class="w-h2 c">${tr('内容不存在或已下线','This page is no longer available')}</h2><p><button class="w-btn blue sm" data-w-go="academy">${tr('返回新手学院','Back to Academy')}</button></p></div></section>`}
+
+/* ---------- 静态页（前端写死，正文由法务提供） ---------- */
+const STATIC={privacy:['隐私政策','Privacy policy',[['我们收集哪些信息','Information we collect'],['信息如何使用','How we use information'],['信息共享与披露','Sharing and disclosure'],['信息存储与安全','Storage and security'],['您的权利','Your rights'],['联系我们','Contact us']]],
+  terms:['使用条款','Terms of use',[['服务说明','About the service'],['账户与安全','Account and security'],['用户行为规范','Acceptable use'],['费用与汇率','Fees and rates'],['责任限制','Limitation of liability'],['条款变更','Changes to these terms']]]};
+function wStatic(k){const x=STATIC[k];if(!x)return wNotFound();
+  return `<section class="w-phero" style="padding:40px 0 64px"><div class="w-wrap" style="max-width:880px">
+    <div class="w-crumb"><button data-w-go="home">${tr('首页','Home')}</button>/<span>${tr(x[0],x[1])}</span></div>
+    <h1 class="w-h2" style="font-size:36px">${tr(x[0],x[1])}</h1><p class="w-sub">${tr('更新日期','Last updated')}：[${tr('法务填写','set by legal')}]</p>
+    <article class="w-box w-art" style="margin-top:24px;max-width:none"><div class="rt">${x[2].map(([z,e],i)=>`<h2>${i+1}. ${tr(z,e)}</h2><p style="color:var(--w-ink3)">[${tr('正式条款文本由法务提供，前端写死','Final text provided by legal')}]</p>`).join('')}</div></article>
+  </div></section>`}
 
 /* ---------- 关于我们 ---------- */
 function wAbout(){
@@ -1650,7 +1763,7 @@ function wApply(){
       ${fld('desc',tr('合作说明','About your business'),`<textarea id="wf-desc" rows="4" maxlength="500" placeholder="${tr('简单介绍您的业务和合作需求','Tell us about your business and what you need')}">${esc(F.desc)}</textarea>`,true,false)}
       <div class="w-f full"><span class="w-lb">${tr('资质附件（选填，最多 3 张，JPG / PNG，≤ 5MB）','Licences (optional, up to 3 images, ≤ 5MB)')}</span><div class="w-upl">${F.files.map((f,i)=>`<div class="f"><img src="${f.src}" alt=""><button type="button" data-w-rmf="${i}" aria-label="${tr('删除','Remove')}">×</button></div>`).join('')}${F.files.length<3?`<label>+ ${tr('上传','Upload')}<input type="file" id="wf-file" accept="image/jpeg,image/png,image/webp"></label>`:''}</div></div>
       ${fld('cap',tr('验证码','Verification'),`<div class="w-cap"><span>${F.ca} + ${F.cb} = ?</span><input id="wf-cap" inputmode="numeric" value="${esc(F.cap)}" style="width:120px"></div>`)}
-      <div class="w-f full ${er.agree?'er':''}"><label class="chk" style="font-size:14px"><input type="checkbox" id="wf-agree" ${F.agree?'checked':''}>${tr('我已阅读并同意','I agree to the')} <button type="button" class="w-more" data-w-soon style="padding:0">${tr('《隐私政策》','Privacy policy')}</button></label>${er.agree?`<span class="em">${er.agree}</span>`:''}</div>
+      <div class="w-f full ${er.agree?'er':''}"><label class="chk" style="font-size:14px"><input type="checkbox" id="wf-agree" ${F.agree?'checked':''}>${tr('我已阅读并同意','I agree to the')} <button type="button" class="w-more" data-w-go="page/privacy" style="padding:0">${tr('《隐私政策》','Privacy policy')}</button></label>${er.agree?`<span class="em">${er.agree}</span>`:''}</div>
       <div class="full"><button class="w-btn blue" type="submit" style="min-width:200px">${tr('提交申请','Submit')}</button></div>
     </form></div></section>`;
 }
@@ -1685,9 +1798,10 @@ function renderSite(parts,keep){
   else if(page==='service')body=wService();
   else if(page==='academy')body=wAcademy();
   else if(page==='about')body=wAbout();
+  else if(page==='page'){body=wStatic(arg[0]);act=''}
   else if(page==='apply'){body=wApply();act='about'}
-  else if(page==='list'){body=wList(arg[0],arg[1]);act=arg[0]==='news'?'home':'academy'}
-  else if(page==='detail'){const c=byId(arg[0]);body=wDetail(arg[0]);act=c&&c.type==='news'?'home':'academy'}
+  else if(page==='list'){body=wList(arg[0],arg[1]);act='academy'}
+  else if(page==='detail'){body=wDetail(arg[0]);act='academy'}
   else {body=wHome();act='home'}
   const y=window.scrollY;
   $('#site').innerHTML=wHeader(act)+'<main>'+body+'</main>'+wFooter()+`<button class="w-back" data-w-back>${svg('M15 6l-6 6 6 6',16)}返回运营后台</button>`;
@@ -1698,12 +1812,12 @@ function renderSite(parts,keep){
   const wq=$('#wq');wq&&(wq.oninput=()=>{WL.q=wq.value;WL.page=1;clearTimeout(wq._t);wq._t=setTimeout(()=>{renderSite(parts,true);const i=$('#wq');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)});
   $('#wlang').onchange=e=>{SL=e.target.value;renderSite(parts,true)};
   if(WPEND){const t=document.getElementById(WPEND);WPEND=null;t&&setTimeout(()=>window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-80,behavior:'smooth'}),30)}
-  $('#site').onclick=e=>{if(e.target.tagName==='IMG'&&e.target.closest('.w-art .rt'))return openLB({src:e.target.src,w:e.target.naturalWidth,h:e.target.naturalHeight,name:''});const t=e.target.closest('[data-w-go],[data-w-scroll],[data-w-dl],[data-w-kf],[data-w-soon],[data-w-proto],[data-w-back],[data-w-img],[data-w-pg]');if(!t||t.disabled)return;
+  $('#site').onclick=e=>{const dr=$('#site .w-drawer');if(e.target.closest('[data-w-menu]')){dr.hidden=!dr.hidden;return}if(e.target.closest('.w-drawer-panel button'))dr.hidden=true;if(e.target.tagName==='IMG'&&e.target.closest('.w-art .rt'))return openLB({src:e.target.src,w:e.target.naturalWidth,h:e.target.naturalHeight,name:''});const t=e.target.closest('[data-w-go],[data-w-scroll],[data-w-dl],[data-w-kf],[data-w-soon],[data-w-proto],[data-w-back],[data-w-img],[data-w-pg]');if(!t||t.disabled)return;
     if(t.dataset.wGo!==undefined){if(t.dataset.wTo)WPEND=t.dataset.wTo;const h='#/site/'+t.dataset.wGo;if(location.hash===h){renderSite(t.dataset.wGo.split('/'),!!WPEND)}else location.hash=h;return}
     if(t.dataset.wScroll){const el=document.getElementById(t.dataset.wScroll);el&&window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-80,behavior:'smooth'});return}
     if(t.dataset.wPg){WL.page=+t.dataset.wPg;renderSite(parts,false);return}
     if(t.dataset.wImg!==undefined)return openLB(WIMGS[+t.dataset.wImg]);
-    if(t.hasAttribute('data-w-dl'))return modal({title:tr('扫码下载易换 App','Download Yihuan'),body:`<div class="w-qrm"><img src="${qrImg()}" alt=""><div style="display:flex;flex-direction:column;gap:10px"><b>${tr('手机扫码下载','Scan with your phone')}</b><button class="btn" onclick="toast('跳转 App Store（原型示意）')">iPhone</button><button class="btn" onclick="toast('下载 Android 安装包（原型示意）')">Android</button><button class="btn ghost" onclick="closeLayer();location.hash='#/site/detail/TU20261001'">${tr('安装教程','Install guide')}</button></div></div>`});
+    if(t.hasAttribute('data-w-dl'))return modal({title:tr('扫码下载易换 App','Download Yihuan'),body:`<div class="w-qrm"><img src="${qrImg()}" alt=""><div style="display:flex;flex-direction:column;gap:10px"><b>${tr('手机扫码下载','Scan with your phone')}</b><button class="btn" onclick="toast('跳转 App Store（原型示意）')">iPhone</button><button class="btn" onclick="toast('下载 Android 安装包（原型示意）')">Android</button><button class="btn ghost" onclick="closeLayer();location.hash='#/site/list/tutorial/c1'">${tr('安装教程','Install guide')}</button></div></div>`});
     if(t.hasAttribute('data-w-kf'))return toast(tr('打开在线客服（原型示意）','Opening live chat (prototype)'));
     if(t.hasAttribute('data-w-proto'))return toast(tr('打开 Telegram 频道（原型示意）','Opening Telegram (prototype)'));
     if(t.hasAttribute('data-w-soon'))return toast(tr('页面待设计','Coming soon'));
@@ -1743,15 +1857,17 @@ function pageCats(){
   const cnt=id=>S.contents.filter(c=>c.cat===id).length;
   $('#page').innerHTML=`<div class="ph"><h1>分类管理</h1><span class="sp"></span>${ok?`<button class="btn pri" data-act="add">${svg('M12 5v14M5 12h14',16)}新增分类</button>`:''}</div>
   <div class="card"><div class="tabs">${Object.entries(TYPES).map(([k,v])=>`<button class="${CT===k?'on':''}" data-act="t" data-v="${k}">${v.zh}<em>${S.cats[k].length}</em></button>`).join('')}</div>
-  <div class="tbl-wrap"><table class="tbl" style="min-width:720px"><thead><tr><th style="width:90px">排序</th><th>中文名称</th><th>English</th><th style="text-align:right">内容数</th><th>启用</th><th>操作</th></tr></thead><tbody>
+  <div class="tbl-wrap"><table class="tbl" style="min-width:720px"><thead><tr><th style="width:90px">排序</th><th>中文名称</th><th>English</th><th style="text-align:right">内容数</th><th>标红</th><th>启用</th><th>操作</th></tr></thead><tbody>
   ${list.map((c,i)=>`<tr><td>${ok?`<button class="btn sm icon" data-act="up" data-i="${i}" aria-label="上移" ${i?'':'disabled'}>↑</button> <button class="btn sm icon" data-act="down" data-i="${i}" aria-label="下移" ${i<list.length-1?'':'disabled'}>↓</button>`:`<span class="mono">${i+1}</span>`}</td>
     <td><b style="font-weight:500">${esc(c.zh)}</b></td><td>${esc(c.en)}</td><td class="mono" style="text-align:right">${cnt(c.id)}</td>
+    <td><button class="sw" role="switch" aria-checked="${!!c.red}" aria-label="标红 ${esc(c.zh)}" title="开启后，官网卡片和详情页的分类标签显示为红色" data-act="red" data-i="${i}" ${ok?'':'disabled'}></button></td>
     <td><button class="sw" role="switch" aria-checked="${c.on}" aria-label="启用 ${esc(c.zh)}" data-act="sw" data-i="${i}" ${ok?'':'disabled'}></button></td>
-    <td class="ops">${ok?`<button class="lnk" data-act="edit" data-i="${i}">编辑</button><button class="lnk bad" data-act="del" data-i="${i}" ${cnt(c.id)?'disabled title="分类下还有内容，不能删除"':''}>删除</button>`:'—'}</td></tr>`).join('')||'<tr><td colspan="6"><div class="empty">暂无分类</div></td></tr>'}
+    <td class="ops">${ok?`<button class="lnk" data-act="edit" data-i="${i}">编辑</button><button class="lnk bad" data-act="del" data-i="${i}" ${cnt(c.id)?'disabled title="分类下还有内容，不能删除"':''}>删除</button>`:'—'}</td></tr>`).join('')||'<tr><td colspan="7"><div class="empty">暂无分类</div></td></tr>'}
   </tbody></table></div></div>`;
   $('#page').onclick=e=>{const t=e.target.closest('[data-act]');if(!t||t.disabled)return;const a=t.dataset.act,i=+t.dataset.i;
     if(a==='t'){CT=t.dataset.v;pageCats()}
     else if(a==='up'||a==='down'){moveArr(list,i,a==='up'?-1:1);pageCats()}
+    else if(a==='red'){list[i].red=!list[i].red;toast(list[i].red?'已标红，官网分类标签显示为红色':'已取消标红');pageCats()}
     else if(a==='sw'){list[i].on=!list[i].on;toast(list[i].on?'已启用':'已停用，新内容不可再选此分类');pageCats()}
     else if(a==='del')confirmBox('删除分类',`删除「${esc(list[i].zh)}」？`,'删除',()=>{list.splice(i,1);toast('已删除');pageCats()},true);
     else if(a==='edit'||a==='add')catBox(a==='edit'?list[i]:null);};
@@ -1871,3 +1987,5 @@ route();
 
 
 </script>
+</body>
+</html>
